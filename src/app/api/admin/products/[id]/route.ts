@@ -1,0 +1,172 @@
+import { NextRequest, NextResponse } from "next/server";
+
+import { z } from "zod";
+
+import { getAdminSupabase, logAdminActivity } from "@/lib/admin";
+
+const productSchema = z.object({
+  id: z.string().uuid().optional(),
+  name: z.string().min(1),
+  slug: z.string().min(1),
+  sku: z.string().max(128).optional().nullable(),
+  description: z.string().nullable(),
+  priceCents: z.number().int().nonnegative(),
+  salePriceCents: z.number().int().nonnegative().optional().nullable(),
+  stock: z.number().int().nonnegative(),
+  images: z.array(z.string().url()).optional().default([]),
+  sizes: z.array(z.string().min(1)).optional().default([]),
+  sizeStock: z
+    .array(
+      z.object({
+        size: z.string().min(1),
+        stock: z.number().int().nonnegative(),
+      }),
+    )
+    .optional()
+    .default([]),
+  colors: z.array(z.string().min(1)).optional().default([]),
+  colorStock: z
+    .array(
+      z.object({
+        color: z.string().min(1),
+        hex: z.string().optional().nullable(),
+        stock: z.number().int().nonnegative(),
+      }),
+    )
+    .optional()
+    .default([]),
+  categoryId: z.string().uuid().nullable().or(z.literal("")),
+  isFeatured: z.boolean(),
+});
+
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
+  const { supabase, isAdmin, adminProfileId } = await getAdminSupabase();
+
+  if (!isAdmin) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  }
+
+  const body = await request.json();
+
+  const parsed = productSchema.safeParse(body);
+
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid data" }, { status: 400 });
+  }
+
+  const value = parsed.data;
+
+  const { id: routeId } = await context.params;
+
+  const effectiveId =
+    value.id && value.id !== "undefined" && value.id !== ""
+      ? value.id
+      : routeId;
+
+  if (!effectiveId || effectiveId === "undefined") {
+    return NextResponse.json(
+      { error: "Missing or invalid product id for update" },
+      { status: 400 },
+    );
+  }
+
+  const { error } = await supabase
+    .from("products")
+    .update({
+      name: value.name,
+      slug: value.slug,
+      sku: value.sku ? value.sku.trim() : null,
+      description: value.description,
+      price: value.priceCents,
+      sale_price: value.salePriceCents ?? null,
+      stock: value.stock,
+      images: value.images ?? [],
+      sizes: value.sizes ?? [],
+      size_stock: value.sizeStock ?? [],
+      colors: value.colors ?? [],
+      color_stock: value.colorStock ?? [],
+      category_id: value.categoryId || null,
+      is_featured: value.isFeatured,
+    })
+    .eq("id", effectiveId);
+
+  if (error) {
+    return NextResponse.json(
+      { error: error.message ?? "Could not update product" },
+      {
+        status: 500,
+      },
+    );
+  }
+
+  await logAdminActivity(supabase, adminProfileId, {
+    action: "update_product",
+    entityType: "product",
+    entityId: effectiveId,
+    description: `Updated product "${value.name}"`,
+  });
+
+  return NextResponse.json({ id: effectiveId }, { status: 200 });
+}
+
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
+  const { supabase, isAdmin, adminProfileId } = await getAdminSupabase();
+
+  if (!isAdmin) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  }
+
+  let idFromBody: string | null = null;
+
+  try {
+    const body = (await request.json()) as { id?: unknown };
+    if (body && typeof body.id === "string") {
+      idFromBody = body.id;
+    }
+  } catch {
+    // ignore body parse errors, we'll fall back to route param
+  }
+
+  const { id: routeId } = await context.params;
+  const rawId = idFromBody ?? routeId;
+
+  const idResult = z.string().uuid().safeParse(rawId);
+
+  if (!idResult.success) {
+    return NextResponse.json(
+      { error: `Invalid product id for delete: ${rawId}` },
+      { status: 400 },
+    );
+  }
+
+  const productId = idResult.data;
+
+  const { error } = await supabase
+    .from("products")
+    .delete()
+    .eq("id", productId);
+
+  if (error) {
+    return NextResponse.json(
+      { error: error.message ?? "Could not delete product" },
+      {
+        status: 500,
+      },
+    );
+  }
+
+  await logAdminActivity(supabase, adminProfileId, {
+    action: "delete_product",
+    entityType: "product",
+    entityId: productId,
+    description: `Deleted product with id ${productId}`,
+  });
+
+  return NextResponse.json({ id: productId }, { status: 200 });
+}
