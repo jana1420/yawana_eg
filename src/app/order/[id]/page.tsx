@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { formatOrderId } from "@/lib/utils";
 
 function formatPrice(cents: number) {
   return new Intl.NumberFormat("en-EG", {
@@ -149,7 +150,7 @@ export default async function OrderPage({ params }: PageProps) {
         <div className="space-y-4 text-sm">
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground">Order ID</p>
-            <p className="font-mono text-xs">{data.id}</p>
+            <p className="font-mono text-xs">{formatOrderId(data.id)}</p>
             {shipping.fullName && (
               <p className="text-xs text-muted-foreground">{shipping.fullName}</p>
             )}

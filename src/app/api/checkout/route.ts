@@ -8,6 +8,7 @@ import {
   sendNewOrderNotificationEmail,
 } from "@/lib/email";
 import { sendNewOrderTelegramNotification } from "@/lib/telegram";
+import { formatOrderId } from "@/lib/utils";
 
 const checkoutSchema = z.object({
   email: z.string().email(),
@@ -240,6 +241,7 @@ export async function POST(request: Request) {
   }
 
   try {
+    const prettyOrderId = formatOrderId(order.id);
     const emailItems = orderItems.map((item) => ({
       name: item.name,
       size: item.size,
@@ -267,7 +269,7 @@ export async function POST(request: Request) {
     // Customer confirmation
     await sendOrderConfirmationEmail({
       to: email,
-      orderId: order.id,
+      orderId: prettyOrderId,
       total: orderTotal,
       items: emailItemsWithShipping,
     });
@@ -279,7 +281,7 @@ export async function POST(request: Request) {
     if (adminEmail) {
       await sendNewOrderNotificationEmail({
         to: adminEmail,
-        orderId: order.id,
+        orderId: prettyOrderId,
         total: orderTotal,
         items: emailItemsWithShipping,
         customerEmail: email,
@@ -289,7 +291,7 @@ export async function POST(request: Request) {
     }
 
     await sendNewOrderTelegramNotification({
-      orderId: order.id,
+      orderId: prettyOrderId,
       total: orderTotal,
       items: emailItemsWithShipping,
       customerEmail: email,
