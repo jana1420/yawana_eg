@@ -7,6 +7,7 @@ import {
   sendOrderConfirmationEmail,
   sendNewOrderNotificationEmail,
 } from "@/lib/email";
+import { sendNewOrderTelegramNotification } from "@/lib/telegram";
 
 const checkoutSchema = z.object({
   email: z.string().email(),
@@ -286,6 +287,25 @@ export async function POST(request: Request) {
         customerPhone: shippingAddress.phone,
       });
     }
+
+    await sendNewOrderTelegramNotification({
+      orderId: order.id,
+      total: orderTotal,
+      items: emailItemsWithShipping,
+      customerEmail: email,
+      customerName: shippingAddress.fullName,
+      customerPhone: shippingAddress.phone,
+      shippingAddress: {
+        fullName: shippingAddress.fullName,
+        phone: shippingAddress.phone,
+        addressLine1: shippingAddress.addressLine1,
+        addressLine2: shippingAddress.addressLine2 ?? null,
+        city: shippingAddress.city,
+        state: shippingAddress.state ?? null,
+        postalCode: shippingAddress.postalCode,
+        country: shippingAddress.country,
+      },
+    });
   } catch {
   }
 
