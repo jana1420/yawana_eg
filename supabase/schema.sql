@@ -139,11 +139,15 @@ create table public.site_settings (
   contact_address_line2 text,
   contact_city text,
   contact_country text,
+  contact_instagram_url text,
+  contact_facebook_url text,
+  contact_tiktok_url text,
   shipping_returns_content text,
   terms_content text,
   privacy_content text,
   shipping_flat_fee_cents integer not null default 0,
   hero_additional_image_urls text[] not null default array[]::text[],
+  theme_key text,
   created_at timestamptz not null default now()
 );
 

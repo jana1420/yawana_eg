@@ -127,7 +127,7 @@ export function HeroSection({ siteSettings, query }: HeroSectionProps) {
   return (
     <section className="relative overflow-hidden rounded-2xl border border-border bg-muted/40 shadow-sm">
       {hasHeroImage && (
-        <div className="relative h-[320px] w-full sm:h-[380px] md:h-[460px] lg:h-[520px]">
+        <div className="relative h-[260px] w-full sm:h-[380px] md:h-[460px] lg:h-[520px]">
           {images.map((url, i) => (
             <Image
               key={`${url}-${i}`}
@@ -186,18 +186,18 @@ export function HeroSection({ siteSettings, query }: HeroSectionProps) {
         }`}
       >
         <p
-          className={`text-xs font-medium uppercase tracking-[0.2em] ${
+          className={`text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.18em] ${
             hasHeroImage ? "text-white/80" : "text-muted-foreground"
           }`}
         >
           {newCollectionLabel}
         </p>
         <div className="space-y-3 sm:space-y-4 pointer-events-auto">
-          <h1 className="max-w-2xl text-2xl font-semibold tracking-tight sm:text-3xl md:text-5xl">
+          <h1 className="max-w-2xl text-lg font-semibold tracking-tight sm:text-2xl md:text-3xl">
             {heroTitle}
           </h1>
           <p
-            className={`max-w-xl text-xs sm:text-sm md:text-base ${
+            className={`max-w-xl text-xs sm:text-sm md:text-base hidden sm:block ${
               hasHeroImage ? "text-white/80" : "text-muted-foreground"
             }`}
           >
@@ -220,7 +220,7 @@ export function HeroSection({ siteSettings, query }: HeroSectionProps) {
               siteSettings?.heroSecondaryHref) && (
               <a
                 href={siteSettings.heroSecondaryHref || "#products"}
-                className={`inline-flex h-8 sm:h-9 items-center rounded-full border px-3 sm:px-4 text-[11px] sm:text-xs font-medium transition-colors ${
+                className={`hidden sm:inline-flex h-8 sm:h-9 items-center rounded-full border px-3 sm:px-4 text-[11px] sm:text-xs font-medium transition-colors ${
                   hasHeroImage
                     ? "border-white text-white hover:bg-white/10 hover:text-white"
                     : "border-border text-foreground hover:bg-accent hover:text-accent-foreground"
@@ -231,7 +231,7 @@ export function HeroSection({ siteSettings, query }: HeroSectionProps) {
             )}
           </div>
           <form
-            className="flex w-full max-w-md items-center gap-2 sm:max-w-xs"
+            className="hidden sm:flex w-full max-w-md items-center gap-2 sm:max-w-xs"
             method="get"
           >
             <Input
