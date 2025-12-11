@@ -186,7 +186,6 @@ export default function CheckoutPage() {
         addressLine2: String(formData.get("addressLine2") ?? ""),
         city: String(formData.get("city") ?? ""),
         state: String(formData.get("state") ?? ""),
-        postalCode: String(formData.get("postalCode") ?? ""),
         country: String(formData.get("country") ?? ""),
       },
       items: cart.items.map((item) => ({
@@ -336,12 +335,6 @@ export default function CheckoutPage() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <label className="block text-xs font-medium text-muted-foreground">
-                Postal code
-              </label>
-              <Input name="postalCode" required className="h-9 text-sm" />
-            </div>
             <div className="space-y-2">
               <label className="block text-xs font-medium text-muted-foreground">
                 Country / Region

@@ -94,7 +94,6 @@ export default async function OrderPage({ params }: PageProps) {
     addressLine2?: string;
     city?: string;
     state?: string;
-    postalCode?: string;
     country?: string;
   };
 
@@ -191,14 +190,13 @@ export default async function OrderPage({ params }: PageProps) {
                   <br />
                 </>
               )}
-              {(shipping.city || shipping.state || shipping.postalCode) && (
+              {(shipping.city || shipping.state) && (
                 <span>
                   {shipping.city}
                   {shipping.state ? `, ${shipping.state}` : ""}
-                  {shipping.postalCode ? ` ${shipping.postalCode}` : ""}
                 </span>
               )}
-              {(shipping.city || shipping.state || shipping.postalCode) && <br />}
+              {(shipping.city || shipping.state) && <br />}
               {shipping.country && <span>{shipping.country}</span>}
             </p>
           </div>

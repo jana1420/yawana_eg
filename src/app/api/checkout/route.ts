@@ -19,7 +19,6 @@ const checkoutSchema = z.object({
     addressLine2: z.string().optional(),
     city: z.string().min(1),
     state: z.string().optional(),
-    postalCode: z.string().min(1),
     country: z.string().min(1),
   }),
   couponCode: z.string().optional(),
@@ -304,7 +303,6 @@ export async function POST(request: Request) {
         addressLine2: shippingAddress.addressLine2 ?? null,
         city: shippingAddress.city,
         state: shippingAddress.state ?? null,
-        postalCode: shippingAddress.postalCode,
         country: shippingAddress.country,
       },
     });

@@ -14,7 +14,6 @@ export type TelegramShippingAddress = {
   addressLine2?: string | null;
   city: string;
   state?: string | null;
-  postalCode: string;
   country: string;
 };
 
@@ -69,7 +68,7 @@ export async function sendNewOrderTelegramNotification(
       a.addressLine2 && a.addressLine2.trim().length > 0
         ? a.addressLine2
         : null,
-      `${a.city}${a.state ? ", " + a.state : ""} ${a.postalCode}`,
+      `${a.city}${a.state ? ", " + a.state : ""}`,
       a.country,
     ].filter((x): x is string => Boolean(x && x.trim().length > 0));
 
