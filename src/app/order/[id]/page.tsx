@@ -7,7 +7,7 @@ function formatPrice(cents: number) {
   return new Intl.NumberFormat("en-EG", {
     style: "currency",
     currency: "EGP",
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 0,
   }).format(cents / 100);
 }
 
