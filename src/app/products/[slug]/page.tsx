@@ -2,9 +2,7 @@ import { notFound } from "next/navigation";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Category, Product } from "@/lib/types";
-import { ProductDetails } from "@/components/product-details";
-import { ProductGallery } from "@/components/product-gallery";
-import { ProductCard } from "@/components/product-card";
+import { ProductPageClient } from "@/components/product-page-client";
 
 type PageProps = {
   params: Promise<{
@@ -82,6 +80,7 @@ export default async function ProductPage({ params }: PageProps) {
             color?: unknown;
             hex?: unknown;
             stock?: unknown;
+            imageUrl?: unknown;
           };
           if (typeof value.color !== "string") return null;
           const n =
@@ -91,9 +90,18 @@ export default async function ProductPage({ params }: PageProps) {
             typeof value.hex === "string" && value.hex.length > 0
               ? value.hex
               : null;
-          return { color: value.color, hex, stock };
+          const imageUrl =
+            typeof value.imageUrl === "string" && value.imageUrl.length > 0
+              ? value.imageUrl
+              : null;
+          return { color: value.color, hex, stock, imageUrl };
         })
-        .filter(Boolean) as { color: string; hex: string | null; stock: number }[])
+        .filter(Boolean) as {
+          color: string;
+          hex: string | null;
+          stock: number;
+          imageUrl: string | null;
+        }[])
     : [];
 
   const product: Product = {
@@ -173,32 +181,5 @@ export default async function ProductPage({ params }: PageProps) {
     });
   }
 
-  return (
-    <div className="space-y-10 pb-12 pt-8">
-      <div className="grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-        <ProductGallery images={product.images} name={product.name} />
-        <ProductDetails product={product} />
-      </div>
-
-      {relatedProducts.length > 0 && (
-        <section className="space-y-3">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <h2 className="text-sm font-medium tracking-tight">
-                You may also like
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                More pieces from this collection.
-              </p>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {relatedProducts.map((item) => (
-              <ProductCard key={item.id} product={item} />
-            ))}
-          </div>
-        </section>
-      )}
-    </div>
-  );
+  return <ProductPageClient product={product} relatedProducts={relatedProducts} />;
 }

@@ -20,9 +20,15 @@ function formatPrice(cents: number) {
 
 type ProductDetailsProps = {
   product: Product;
+  selectedColor?: string | null;
+  onColorChange?: (color: string | null) => void;
 };
 
-export function ProductDetails({ product }: ProductDetailsProps) {
+export function ProductDetails({
+  product,
+  selectedColor: selectedColorProp,
+  onColorChange,
+}: ProductDetailsProps) {
   const { addToCart } = useCart();
 
   const isInStock = product.stock > 0;
@@ -37,11 +43,21 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   const [selectedSize, setSelectedSize] = useState<string | null>(
     hasSizes ? product.sizes[0] ?? null : null,
   );
-  const [selectedColor, setSelectedColor] = useState<string | null>(
-    hasColors && Array.isArray(product.colors) && product.colors.length > 0
+  const [internalSelectedColor, setInternalSelectedColor] = useState<
+    string | null
+  >(() => {
+    if (typeof selectedColorProp !== "undefined") {
+      return selectedColorProp;
+    }
+    return hasColors && Array.isArray(product.colors) && product.colors.length > 0
       ? product.colors[0] ?? null
-      : null,
-  );
+      : null;
+  });
+
+  const selectedColor =
+    typeof selectedColorProp !== "undefined"
+      ? selectedColorProp
+      : internalSelectedColor;
   const [sizeError, setSizeError] = useState<string | null>(null);
   const [justAdded, setJustAdded] = useState(false);
 
@@ -76,13 +92,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
     if (maxQuantity <= 0) return;
 
-    addToCart(
-      product,
-      1,
-      selectedSize ?? null,
-      selectedColor ?? null,
-      maxQuantity,
-    );
+    addToCart(product, 1, selectedSize ?? null, selectedColor ?? null, maxQuantity);
     setJustAdded(true);
     window.setTimeout(() => {
       setJustAdded(false);
@@ -163,7 +173,10 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                   type="button"
                   onClick={() => {
                     if (isSoldOutColor) return;
-                    setSelectedColor(colorName);
+                    if (onColorChange) onColorChange(colorName);
+                    if (typeof selectedColorProp === "undefined") {
+                      setInternalSelectedColor(colorName);
+                    }
                   }}
                   className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
                     isSoldOutColor

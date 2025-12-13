@@ -30,6 +30,7 @@ const productSchema = z.object({
         color: z.string().min(1),
         hex: z.string().optional().nullable(),
         stock: z.number().int().nonnegative(),
+        imageUrl: z.string().url().optional().nullable(),
       }),
     )
     .optional()

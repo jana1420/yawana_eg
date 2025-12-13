@@ -40,6 +40,7 @@ export type ProductColorStock = {
   color: string;
   hex?: string | null;
   stock: number;
+  imageUrl?: string | null;
 };
 
 export type Product = {

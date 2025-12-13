@@ -73,6 +73,7 @@ export default async function AdminEditProductPage({ params }: PageProps) {
             color?: unknown;
             hex?: unknown;
             stock?: unknown;
+            imageUrl?: unknown;
           };
           if (typeof value.color !== "string") return null;
           const n =
@@ -82,9 +83,18 @@ export default async function AdminEditProductPage({ params }: PageProps) {
             typeof value.hex === "string" && value.hex.length > 0
               ? value.hex
               : null;
-          return { color: value.color, hex, stock };
+          const imageUrl =
+            typeof value.imageUrl === "string" && value.imageUrl.length > 0
+              ? value.imageUrl
+              : null;
+          return { color: value.color, hex, stock, imageUrl };
         })
-        .filter(Boolean) as { color: string; hex: string | null; stock: number }[])
+        .filter(Boolean) as {
+          color: string;
+          hex: string | null;
+          stock: number;
+          imageUrl: string | null;
+        }[])
     : [];
 
   return (

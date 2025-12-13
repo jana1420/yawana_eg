@@ -28,7 +28,12 @@ type ProductFormProps = {
     sizes?: string[];
     sizeStock?: { size: string; stock: number }[];
     colors?: string[];
-    colorStock?: { color: string; hex: string | null; stock: number }[];
+    colorStock?: {
+      color: string;
+      hex: string | null;
+      stock: number;
+      imageUrl?: string | null;
+    }[];
     categoryId: string | null;
     isFeatured: boolean;
   };
@@ -94,7 +99,7 @@ export function ProductForm({
   });
 
   const [colorRows, setColorRows] = useState<
-    { color: string; hex: string; stock: string }[]
+    { color: string; hex: string; stock: string; imageUrl: string }[]
   >(() => {
     const fromInitial = initialValues?.colorStock ?? [];
     const baseColors =
@@ -112,11 +117,15 @@ export function ProductForm({
     const hexByColor = new Map(
       fromInitial.map((entry) => [entry.color, entry.hex ?? ""]),
     );
+    const imageUrlByColor = new Map(
+      fromInitial.map((entry) => [entry.color, entry.imageUrl ?? ""]),
+    );
 
     return baseColors.map((color) => ({
       color,
       hex: hexByColor.get(color) ?? "#000000",
       stock: stockByColor.get(color) ?? "",
+      imageUrl: imageUrlByColor.get(color) ?? "",
     }));
   });
 
@@ -208,6 +217,56 @@ export function ProductForm({
       setImageUploadError("Network error. Please try again.");
       setIsUploadingImage(false);
     } finally {
+      event.target.value = "";
+    }
+  }
+
+  async function handleColorImageUpload(
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > MAX_IMAGE_SIZE_BYTES) {
+      setImageUploadError("Image is too large. Maximum size is 500KB.");
+      event.target.value = "";
+      return;
+    }
+
+    setIsUploadingImage(true);
+    setImageUploadError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/admin/upload-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = (await response.json()) as { url?: string; error?: string };
+
+      if (!response.ok || !data.url) {
+        setImageUploadError(data.error ?? "Unable to upload image.");
+        return;
+      }
+
+      setColorRows((rows) =>
+        rows.map((row, i) =>
+          i === index
+            ? {
+                ...row,
+                imageUrl: data.url ?? "",
+              }
+            : row,
+        ),
+      );
+    } catch {
+      setImageUploadError("Network error. Please try again.");
+    } finally {
+      setIsUploadingImage(false);
       event.target.value = "";
     }
   }
@@ -310,10 +369,16 @@ export function ProductForm({
         color: row.color.trim(),
         hex: row.hex.trim(),
         stock: row.stock.trim(),
+        imageUrl: row.imageUrl.trim(),
       }))
       .filter((row) => row.color.length > 0);
 
-    const colorStockPayload: { color: string; hex: string | null; stock: number }[] = [];
+    const colorStockPayload: {
+      color: string;
+      hex: string | null;
+      stock: number;
+      imageUrl: string | null;
+    }[] = [];
 
     for (const row of cleanedColorRows) {
       let stockForColor = 0;
@@ -331,10 +396,14 @@ export function ProductForm({
           ? row.hex
           : null;
 
+      const imageUrl =
+        row.imageUrl && row.imageUrl.length > 0 ? row.imageUrl : null;
+
       colorStockPayload.push({
         color: row.color,
         hex,
         stock: stockForColor,
+        imageUrl,
       });
     }
 
@@ -465,7 +534,7 @@ export function ProductForm({
 
   function handleColorRowChange(
     index: number,
-    field: "color" | "hex" | "stock",
+    field: "color" | "hex" | "stock" | "imageUrl",
     value: string,
   ) {
     setColorRows((rows) =>
@@ -483,7 +552,7 @@ export function ProductForm({
   function handleAddColorRow() {
     setColorRows((rows) => [
       ...rows,
-      { color: "", hex: "#000000", stock: "" },
+      { color: "", hex: "#000000", stock: "", imageUrl: "" },
     ]);
   }
 
@@ -750,6 +819,38 @@ export function ProductForm({
                     inputMode="numeric"
                     className="h-8 w-20 text-xs"
                   />
+                  <div className="flex items-center gap-1">
+                    <input
+                      id={`color-image-upload-${index}`}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(event) => handleColorImageUpload(index, event)}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-7 px-2 text-[11px]"
+                      disabled={isUploadingImage}
+                      onClick={() =>
+                        document
+                          .getElementById(`color-image-upload-${index}`)
+                          ?.click()
+                      }
+                    >
+                      {row.imageUrl ? "Change image" : "Upload image"}
+                    </Button>
+                    {row.imageUrl && (
+                      <div className="h-8 w-8 overflow-hidden rounded-md border border-input bg-muted">
+                        <img
+                          src={row.imageUrl}
+                          alt={`${row.color || "Color"} preview`}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    )}
+                  </div>
                   <button
                     type="button"
                     onClick={() => handleRemoveColorRow(index)}
