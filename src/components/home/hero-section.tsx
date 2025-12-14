@@ -4,8 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 
 import type { SiteSettings } from "@/lib/types";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const DEFAULT_HERO_TITLE_EN = "Minimal essentials for everyday wear.";
@@ -16,10 +14,9 @@ const DEFAULT_SECONDARY_LABEL_EN = "View lookbook";
 
 type HeroSectionProps = {
   siteSettings: SiteSettings | null;
-  query: string;
 };
 
-export function HeroSection({ siteSettings, query }: HeroSectionProps) {
+export function HeroSection({ siteSettings }: HeroSectionProps) {
   const [language, setLanguage] = useState<"en" | "ar">("en");
 
   useEffect(() => {
@@ -58,8 +55,6 @@ export function HeroSection({ siteSettings, query }: HeroSectionProps) {
 
   const isArabic = language === "ar";
 
-  const newCollectionLabel = isArabic ? "مجموعة جديدة" : "New collection";
-
   const rawHeroTitle = (siteSettings?.heroTitle ?? "").trim();
   const heroTitle =
     !rawHeroTitle || rawHeroTitle === DEFAULT_HERO_TITLE_EN
@@ -91,8 +86,6 @@ export function HeroSection({ siteSettings, query }: HeroSectionProps) {
         ? "عرض الإطلالات"
         : DEFAULT_SECONDARY_LABEL_EN
       : rawSecondaryLabel;
-  const searchPlaceholder = isArabic ? "ابحث عن الملابس" : "Search clothing";
-  const searchButtonLabel = isArabic ? "بحث" : "Search";
   const images = useMemo(() => {
     const urls: string[] = [];
     if (siteSettings?.heroImageUrl) {
@@ -185,13 +178,6 @@ export function HeroSection({ siteSettings, query }: HeroSectionProps) {
             : "text-foreground pointer-events-none"
         }`}
       >
-        <p
-          className={`text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.18em] ${
-            hasHeroImage ? "text-white/80" : "text-muted-foreground"
-          }`}
-        >
-          {newCollectionLabel}
-        </p>
         <div className="space-y-3 sm:space-y-4 pointer-events-auto">
           <h1 className="max-w-2xl text-lg font-semibold tracking-tight sm:text-2xl md:text-3xl">
             {heroTitle}
@@ -230,32 +216,6 @@ export function HeroSection({ siteSettings, query }: HeroSectionProps) {
               </a>
             )}
           </div>
-          <form
-            className="hidden sm:flex w-full max-w-md items-center gap-2 sm:max-w-xs"
-            method="get"
-          >
-            <Input
-              name="q"
-              placeholder={searchPlaceholder}
-              defaultValue={query}
-              className={`h-8 sm:h-9 text-[11px] sm:text-xs ${
-                hasHeroImage
-                  ? "border border-white/70 bg-white/10 text-white placeholder:text-white/70 backdrop-blur-sm"
-                  : ""
-              }`}
-            />
-            <Button
-              type="submit"
-              size="sm"
-              className={`h-8 px-3 text-[11px] sm:h-9 sm:px-4 sm:text-xs ${
-                hasHeroImage
-                  ? "border border-white/80 bg-transparent text-white hover:bg-white/10"
-                  : ""
-              }`}
-            >
-              {searchButtonLabel}
-            </Button>
-          </form>
         </div>
       </div>
     </section>

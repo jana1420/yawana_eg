@@ -14,6 +14,11 @@ const siteSettingsSchema = z.object({
   heroSecondaryLabel: z.string().optional(),
   heroSecondaryHref: z.string().optional(),
   heroBannerText: z.string().optional(),
+  aboutEnabled: z.boolean().optional(),
+  aboutTitle: z.string().optional(),
+  aboutBody: z.string().optional(),
+  aboutImage1Url: z.string().optional(),
+  aboutImage2Url: z.string().optional(),
   contactEmail: z.string().optional(),
   contactPhone: z.string().optional(),
   contactAddressLine1: z.string().optional(),
@@ -65,6 +70,16 @@ export async function POST(request: Request) {
     updateData.hero_secondary_href = value.heroSecondaryHref || null;
   if (value.heroBannerText !== undefined)
     updateData.hero_banner_text = value.heroBannerText || null;
+  if (value.aboutEnabled !== undefined)
+    updateData.about_enabled = value.aboutEnabled;
+  if (value.aboutTitle !== undefined)
+    updateData.about_title = value.aboutTitle || null;
+  if (value.aboutBody !== undefined)
+    updateData.about_body = value.aboutBody || null;
+  if (value.aboutImage1Url !== undefined)
+    updateData.about_image1_url = value.aboutImage1Url || null;
+  if (value.aboutImage2Url !== undefined)
+    updateData.about_image2_url = value.aboutImage2Url || null;
   if (value.contactEmail !== undefined)
     updateData.contact_email = value.contactEmail || null;
   if (value.contactPhone !== undefined)

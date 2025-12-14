@@ -17,6 +17,11 @@ export type SiteSettings = {
   heroSecondaryLabel: string | null;
   heroSecondaryHref: string | null;
   heroBannerText: string | null;
+  aboutEnabled?: boolean | null;
+  aboutTitle?: string | null;
+  aboutBody?: string | null;
+  aboutImage1Url?: string | null;
+  aboutImage2Url?: string | null;
   contactEmail: string | null;
   contactPhone: string | null;
   contactAddressLine1: string | null;

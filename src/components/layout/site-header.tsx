@@ -120,9 +120,9 @@ export function SiteHeader() {
   const isArabic = language === "ar";
 
   const labels = {
-    newArrivals: isArabic ? "وصل حديثاً" : "New arrivals",
+    newArrivals: isArabic ? "وصل حديثاً" : "FALL/WINTER ‘26",
     allProducts: isArabic ? "كل المنتجات" : "All products",
-    bestSellers: isArabic ? "الأكثر مبيعاً" : "Best sellers",
+    bestSellers: isArabic ? "تسوق حسب الفئة" : "Shop by category",
     contact: isArabic ? "اتصل بنا" : "Contact",
     account: isArabic ? "الحساب" : "Account",
     cart: isArabic ? "السلة" : "Cart",
@@ -136,8 +136,25 @@ export function SiteHeader() {
   return (
     <>
       <header className="sticky top-0 z-30 border-b bg-background/75 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:grid md:grid-cols-3 md:py-4">
-          <Link href="/" className="flex items-center gap-2 md:order-2 md:justify-self-center">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:grid md:grid-cols-[1fr_auto_1fr] md:py-4">
+          <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex md:justify-self-start">
+            <Link href="/" className="hover:text-foreground">
+              {labels.newArrivals}
+            </Link>
+            <Link href="/all-products" className="hover:text-foreground">
+              {labels.allProducts}
+            </Link>
+            <Link href="/categories" className="hover:text-foreground">
+              {labels.bestSellers}
+            </Link>
+            <Link href="/contact" className="hover:text-foreground">
+              {labels.contact}
+            </Link>
+          </nav>
+          <Link
+            href="/"
+            className="flex items-center justify-center gap-2 md:justify-self-center"
+          >
             <Image
               src={LooseBrandLogo}
               alt="Loose Brand"
@@ -145,21 +162,7 @@ export function SiteHeader() {
               priority
             />
           </Link>
-          <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:order-1 md:flex md:justify-self-start">
-            <Link href="/" className="hover:text-foreground">
-              {labels.newArrivals}
-            </Link>
-            <Link href="/all-products" className="hover:text-foreground">
-              {labels.allProducts}
-            </Link>
-            <Link href="/" className="hover:text-foreground">
-              {labels.bestSellers}
-            </Link>
-            <Link href="/contact" className="hover:text-foreground">
-              {labels.contact}
-            </Link>
-          </nav>
-          <div className="flex items-center gap-3 text-sm md:order-3 md:justify-self-end">
+          <div className="flex items-center gap-3 text-sm md:justify-self-end">
             <button
               type="button"
               className="hidden items-center rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground md:inline-flex"
@@ -250,7 +253,7 @@ export function SiteHeader() {
                   {labels.allProducts}
                 </Link>
                 <Link
-                  href="/"
+                  href="/categories"
                   className="block rounded-lg px-3 py-2.5 hover:bg-muted/80"
                   onClick={() => setIsMobileNavOpen(false)}
                 >

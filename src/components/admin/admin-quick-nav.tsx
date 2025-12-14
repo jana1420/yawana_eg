@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import {
+  Info,
   LayoutDashboard,
   Megaphone,
   Package,
@@ -61,6 +62,7 @@ export function AdminQuickNav() {
     viewProducts: isArabic ? "عرض المنتجات" : "View products",
     viewCategories: isArabic ? "عرض الأقسام" : "View categories",
     editHero: isArabic ? "تعديل الهيرو" : "Edit hero",
+    aboutSection: isArabic ? "قسم من نحن" : "About section",
     contactInfo: isArabic ? "بيانات التواصل" : "Contact info",
     viewOrders: isArabic ? "عرض الطلبات" : "View orders",
     coupons: isArabic ? "قسائم الخصم" : "Coupons",
@@ -112,6 +114,13 @@ export function AdminQuickNav() {
       >
         <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
         <span>{labels.editHero}</span>
+      </a>
+      <a
+        href="/admin/about"
+        className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-3 text-xs font-medium text-muted-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+      >
+        <Info className="h-3.5 w-3.5" aria-hidden="true" />
+        <span>{labels.aboutSection}</span>
       </a>
       <a
         href="/admin/contact"
