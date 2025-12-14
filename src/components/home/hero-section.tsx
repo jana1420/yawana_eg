@@ -190,7 +190,7 @@ export function HeroSection({ siteSettings }: HeroSectionProps) {
             {heroSubtitle}
           </p>
         </div>
-        <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6 pointer-events-auto">
+        <div className="mt-6 sm:mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6 pointer-events-auto">
           <div className="flex gap-3">
             <a
               href="/all-products"
