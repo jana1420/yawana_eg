@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { usePathname, useRouter } from "next/navigation";
 
@@ -137,6 +137,59 @@ export function ProductForm({
   );
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [imageUploadError, setImageUploadError] = useState<string | null>(null);
+
+  function parseImageList(value: string) {
+    return value
+      .split(/\r?\n|,/)
+      .map((entry) => entry.trim())
+      .filter(Boolean);
+  }
+
+  const productImageList = useMemo(() => {
+    const mainImage = imageUrl.trim();
+    const extraImageUrls = parseImageList(galleryImages);
+
+    const merged = [
+      ...(mainImage ? [mainImage] : []),
+      ...extraImageUrls.filter((url) => url !== mainImage),
+    ];
+
+    return Array.from(new Set(merged));
+  }, [galleryImages, imageUrl]);
+
+  function handleRemoveProductImage(targetUrl: string) {
+    const mainImage = imageUrl.trim();
+    const extraImageUrls = parseImageList(galleryImages);
+
+    const merged = [
+      ...(mainImage ? [mainImage] : []),
+      ...extraImageUrls.filter((url) => url !== mainImage),
+    ];
+
+    const nextAll = merged.filter((url) => url !== targetUrl);
+    const nextMain = nextAll[0] ?? "";
+    const nextExtras = nextAll.slice(1);
+
+    setImageUrl(nextMain);
+    setGalleryImages(nextExtras.join("\n"));
+  }
+
+  function handleSetMainProductImage(targetUrl: string) {
+    const mainImage = imageUrl.trim();
+    const extraImageUrls = parseImageList(galleryImages);
+
+    const merged = [
+      ...(mainImage ? [mainImage] : []),
+      ...extraImageUrls.filter((url) => url !== mainImage),
+    ];
+
+    const rest = merged.filter((url) => url !== targetUrl);
+    const nextAll = [targetUrl, ...rest];
+    const unique = Array.from(new Set(nextAll));
+
+    setImageUrl(unique[0] ?? "");
+    setGalleryImages(unique.slice(1).join("\n"));
+  }
 
   useEffect(() => {
     const totalFromSizes = sizeRows.reduce((sum, row) => {
@@ -698,6 +751,56 @@ export function ProductForm({
             <p className="text-[11px] text-red-500">{imageUploadError}</p>
           )}
         </div>
+
+        {productImageList.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-[11px] font-medium text-muted-foreground">
+              Current images
+            </p>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {productImageList.map((url) => {
+                const isMain = url === imageUrl.trim();
+                return (
+                  <div
+                    key={url}
+                    className="space-y-1 rounded-md border border-input bg-background p-2"
+                  >
+                    <div className="aspect-square w-full overflow-hidden rounded-md border border-input bg-muted">
+                      <img
+                        src={url}
+                        alt={isMain ? "Main product image" : "Product image"}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-[10px] text-muted-foreground">
+                        {isMain ? "Main" : "Gallery"}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        {!isMain && (
+                          <button
+                            type="button"
+                            onClick={() => handleSetMainProductImage(url)}
+                            className="text-[11px] font-medium text-primary hover:underline"
+                          >
+                            Set as main
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveProductImage(url)}
+                          className="text-[11px] text-muted-foreground hover:text-red-500"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

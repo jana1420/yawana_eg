@@ -136,8 +136,8 @@ export function SiteHeader() {
   return (
     <>
       <header className="sticky top-0 z-30 border-b bg-background/75 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-4">
-          <Link href="/" className="flex items-center gap-2">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:grid md:grid-cols-3 md:py-4">
+          <Link href="/" className="flex items-center gap-2 md:order-2 md:justify-self-center">
             <Image
               src={LooseBrandLogo}
               alt="Loose Brand"
@@ -145,7 +145,7 @@ export function SiteHeader() {
               priority
             />
           </Link>
-          <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex">
+          <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:order-1 md:flex md:justify-self-start">
             <Link href="/" className="hover:text-foreground">
               {labels.newArrivals}
             </Link>
@@ -159,7 +159,7 @@ export function SiteHeader() {
               {labels.contact}
             </Link>
           </nav>
-          <div className="flex items-center gap-3 text-sm">
+          <div className="flex items-center gap-3 text-sm md:order-3 md:justify-self-end">
             <button
               type="button"
               className="hidden items-center rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground md:inline-flex"
