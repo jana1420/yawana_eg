@@ -14,6 +14,7 @@ const siteSettingsSchema = z.object({
   heroSecondaryLabel: z.string().optional(),
   heroSecondaryHref: z.string().optional(),
   heroBannerText: z.string().optional(),
+  aboutLabel: z.string().optional(),
   aboutEnabled: z.boolean().optional(),
   aboutTitle: z.string().optional(),
   aboutBody: z.string().optional(),
@@ -70,6 +71,8 @@ export async function POST(request: Request) {
     updateData.hero_secondary_href = value.heroSecondaryHref || null;
   if (value.heroBannerText !== undefined)
     updateData.hero_banner_text = value.heroBannerText || null;
+  if (value.aboutLabel !== undefined)
+    updateData.about_label = value.aboutLabel || null;
   if (value.aboutEnabled !== undefined)
     updateData.about_enabled = value.aboutEnabled;
   if (value.aboutTitle !== undefined)

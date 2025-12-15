@@ -6,6 +6,8 @@ type AboutSectionProps = {
 
 export function AboutSection({ siteSettings }: AboutSectionProps) {
   const enabled = !!siteSettings?.aboutEnabled;
+  const rawLabel = (siteSettings?.aboutLabel ?? "").trim();
+  const label = rawLabel || "ABOUT US";
   const title = (siteSettings?.aboutTitle ?? "").trim();
   const body = (siteSettings?.aboutBody ?? "").trim();
 
@@ -23,7 +25,7 @@ export function AboutSection({ siteSettings }: AboutSectionProps) {
       <div className="grid gap-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-center">
         <div className="space-y-3 sm:space-y-4">
           <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-            About us
+            {label}
           </p>
           {title && (
             <h2 className="text-lg font-semibold tracking-tight sm:text-xl">

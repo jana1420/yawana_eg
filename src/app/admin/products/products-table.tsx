@@ -13,6 +13,7 @@ type ProductRow = {
   sale_price?: number | null;
   stock: number;
   is_featured: boolean;
+   is_archived: boolean;
   created_at: string;
   images?: string[] | null;
   category_name?: string | null;
@@ -91,11 +92,12 @@ export function AdminProductsTable({
             : [];
           const mainImageUrl = imageArray[0] ?? null;
 
+          const rowClasses = `grid grid-cols-1 items-start gap-2 px-4 py-3 text-xs hover:bg-muted/60 sm:grid-cols-[1.6fr_1.1fr_1fr_0.8fr_1.1fr_auto] sm:items-center ${
+            product.is_archived ? "opacity-60" : ""
+          }`;
+
           return (
-            <div
-              key={product.id}
-              className="grid grid-cols-1 items-start gap-2 px-4 py-3 text-xs hover:bg-muted/60 sm:grid-cols-[1.6fr_1.1fr_1fr_0.8fr_1.1fr_auto] sm:items-center"
-            >
+            <div key={product.id} className={rowClasses}>
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 overflow-hidden rounded-md border border-border bg-muted">
                   {mainImageUrl ? (
@@ -136,8 +138,18 @@ export function AdminProductsTable({
                 </span>
               </span>
               <span>{product.stock}</span>
-              <span className="text-right text-xs text-muted-foreground">
-                {product.is_featured ? "Featured" : "Standard"}
+              <span
+                className={`text-right text-xs ${
+                  product.is_archived
+                    ? "text-muted-foreground/80 italic"
+                    : "text-muted-foreground"
+                }`}
+              >
+                {product.is_archived
+                  ? "Archived"
+                  : product.is_featured
+                    ? "Featured"
+                    : "Standard"}
               </span>
               <div className="flex justify-end">
                 <a

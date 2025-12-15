@@ -73,6 +73,7 @@ export async function POST(request: Request) {
       color_stock: value.colorStock ?? [],
       category_id: value.categoryId || null,
       is_featured: value.isFeatured,
+      is_archived: false,
     })
     .select("id")
     .single();

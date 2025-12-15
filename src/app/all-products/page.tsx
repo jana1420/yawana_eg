@@ -8,8 +8,9 @@ export default async function AllProductsPage() {
   const { data } = await supabase
     .from("products")
     .select(
-      "id, name, slug, description, price, sale_price, images, sizes, size_stock, stock, category_id, is_featured, created_at",
+      "id, name, slug, description, price, sale_price, images, sizes, size_stock, stock, category_id, is_featured, is_archived, created_at",
     )
+    .eq("is_archived", false)
     .order("created_at", { ascending: false });
 
   const products: Product[] = (data ?? []).map((item) => {
@@ -49,6 +50,7 @@ export default async function AllProductsPage() {
       categoryId: (item as { category_id?: string | null }).category_id ?? null,
       category: null,
       isFeatured: item.is_featured ?? false,
+      isArchived: (item as { is_archived?: boolean | null }).is_archived ?? false,
       createdAt: item.created_at,
     } satisfies Product;
   });

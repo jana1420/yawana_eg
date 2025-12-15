@@ -6,7 +6,7 @@ import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { MessageCircle } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,13 +56,10 @@ export default async function RootLayout({
             href="https://wa.me/201151678074"
             target="_blank"
             rel="noopener noreferrer"
-            className="fixed bottom-3 right-3 z-40 inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1.5 text-[11px] font-medium text-primary-foreground shadow-md transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:bottom-5 sm:right-5 sm:px-3 sm:text-xs"
+            aria-label="Chat on WhatsApp"
+            className="fixed bottom-3 right-3 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:bottom-5 sm:right-5"
           >
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-background/10">
-              <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
-            </span>
-            <span className="hidden sm:inline">WhatsApp</span>
-            <span className="sm:hidden">Chat</span>
+            <FaWhatsapp className="h-5 w-5" aria-hidden="true" />
           </a>
         </CartProvider>
       </body>

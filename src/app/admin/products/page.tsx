@@ -23,7 +23,7 @@ export default async function AdminProductsPage() {
   const { data: products } = await supabase
     .from("products")
     .select(
-      "id, name, slug, sku, price, sale_price, stock, is_featured, created_at, images, category_id, categories(name)",
+      "id, name, slug, sku, price, sale_price, stock, is_featured, is_archived, created_at, images, category_id, categories(name)",
     )
     .order("created_at", { ascending: false });
 
@@ -43,6 +43,9 @@ export default async function AdminProductsPage() {
       sale_price: salePrice ?? null,
       stock: product.stock as number,
       is_featured: product.is_featured as boolean,
+      is_archived:
+        ((product as { is_archived?: boolean | null }).is_archived ?? false) ===
+        true,
       created_at: product.created_at as string,
       images,
       category_name: categoryName ?? null,

@@ -17,6 +17,7 @@ export type SiteSettings = {
   heroSecondaryLabel: string | null;
   heroSecondaryHref: string | null;
   heroBannerText: string | null;
+  aboutLabel?: string | null;
   aboutEnabled?: boolean | null;
   aboutTitle?: string | null;
   aboutBody?: string | null;
@@ -66,6 +67,7 @@ export type Product = {
   categoryId: string | null;
   category?: Category | null;
   isFeatured: boolean;
+  isArchived?: boolean;
   createdAt: string;
 };
 

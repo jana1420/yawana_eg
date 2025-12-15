@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 type AboutSettingsFormProps = {
   initialValues?: {
     aboutEnabled: boolean;
+    aboutLabel: string;
     aboutTitle: string;
     aboutBody: string;
     aboutImage1Url: string;
@@ -20,6 +21,9 @@ export function AboutSettingsForm({ initialValues }: AboutSettingsFormProps) {
 
   const [aboutEnabled, setAboutEnabled] = useState(
     initialValues?.aboutEnabled ?? false,
+  );
+  const [aboutLabel, setAboutLabel] = useState(
+    initialValues?.aboutLabel ?? "About us",
   );
   const [aboutTitle, setAboutTitle] = useState(
     initialValues?.aboutTitle ?? "",
@@ -108,6 +112,7 @@ export function AboutSettingsForm({ initialValues }: AboutSettingsFormProps) {
 
     const payload = {
       aboutEnabled,
+      aboutLabel: aboutLabel.trim(),
       aboutTitle: aboutTitle.trim(),
       aboutBody: aboutBody.trim(),
       aboutImage1Url: aboutImage1Url.trim(),
@@ -156,6 +161,18 @@ export function AboutSettingsForm({ initialValues }: AboutSettingsFormProps) {
           />
           <span>Show About us section on the homepage</span>
         </label>
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-xs font-medium text-muted-foreground">
+          Section label
+        </label>
+        <Input
+          value={aboutLabel}
+          onChange={(event) => setAboutLabel(event.target.value)}
+          placeholder="ABOUT US"
+          className="h-9 text-sm uppercase tracking-[0.25em]"
+        />
       </div>
 
       <div className="space-y-2">
@@ -231,6 +248,15 @@ export function AboutSettingsForm({ initialValues }: AboutSettingsFormProps) {
                     className="h-full w-full object-cover"
                   />
                 </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-7 px-2 text-[11px]"
+                  onClick={() => setAboutImage1Url("")}
+                >
+                  Remove
+                </Button>
               </div>
             )}
           </div>
@@ -279,6 +305,15 @@ export function AboutSettingsForm({ initialValues }: AboutSettingsFormProps) {
                     className="h-full w-full object-cover"
                   />
                 </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-7 px-2 text-[11px]"
+                  onClick={() => setAboutImage2Url("")}
+                >
+                  Remove
+                </Button>
               </div>
             )}
           </div>

@@ -148,6 +148,38 @@ export async function DELETE(
 
   const productId = idResult.data;
 
+  const { data: existingOrderItem } = await supabase
+    .from("order_items")
+    .select("id")
+    .eq("product_id", productId)
+    .limit(1)
+    .maybeSingle();
+
+  if (existingOrderItem) {
+    const { error: archiveError } = await supabase
+      .from("products")
+      .update({ is_archived: true })
+      .eq("id", productId);
+
+    if (archiveError) {
+      return NextResponse.json(
+        { error: archiveError.message ?? "Could not archive product" },
+        {
+          status: 500,
+        },
+      );
+    }
+
+    await logAdminActivity(supabase, adminProfileId, {
+      action: "archive_product",
+      entityType: "product",
+      entityId: productId,
+      description: `Archived product with id ${productId} (referenced by orders)`,
+    });
+
+    return NextResponse.json({ id: productId, archived: true }, { status: 200 });
+  }
+
   const { error } = await supabase
     .from("products")
     .delete()
@@ -169,5 +201,5 @@ export async function DELETE(
     description: `Deleted product with id ${productId}`,
   });
 
-  return NextResponse.json({ id: productId }, { status: 200 });
+  return NextResponse.json({ id: productId, archived: false }, { status: 200 });
 }

@@ -26,7 +26,7 @@ export default async function Home({ searchParams }: HomeProps) {
   const { data: settingsRow } = await supabase
     .from("site_settings")
     .select(
-      "id, hero_title, hero_subtitle, hero_image_url, hero_primary_label, hero_primary_href, hero_secondary_label, hero_secondary_href, hero_banner_text, about_enabled, about_title, about_body, about_image1_url, about_image2_url, contact_email, contact_phone, contact_address_line1, contact_address_line2, contact_city, contact_country, hero_additional_image_urls, created_at",
+      "id, hero_title, hero_subtitle, hero_image_url, hero_primary_label, hero_primary_href, hero_secondary_label, hero_secondary_href, hero_banner_text, about_enabled, about_label, about_title, about_body, about_image1_url, about_image2_url, contact_email, contact_phone, contact_address_line1, contact_address_line2, contact_city, contact_country, hero_additional_image_urls, created_at",
     )
     .order("created_at", { ascending: false })
     .limit(1)
@@ -45,6 +45,7 @@ export default async function Home({ searchParams }: HomeProps) {
           ? ((settingsRow as { hero_additional_image_urls?: string[] })
               .hero_additional_image_urls ?? [])
           : [],
+        aboutLabel: (settingsRow as { about_label?: string | null }).about_label ?? null,
         aboutEnabled: (settingsRow as { about_enabled?: boolean | null })
           .about_enabled ?? null,
         aboutTitle: (settingsRow as { about_title?: string | null }).about_title ?? null,
@@ -84,6 +85,7 @@ export default async function Home({ searchParams }: HomeProps) {
     .select(
       "id, name, slug, description, price, sale_price, images, sizes, size_stock, stock, category_id, is_featured, created_at",
     )
+    .eq("is_archived", false)
     .order("created_at", { ascending: false })
     .limit(12);
 
@@ -128,6 +130,7 @@ export default async function Home({ searchParams }: HomeProps) {
       categoryId: (item as { category_id?: string | null }).category_id ?? null,
       category: null,
       isFeatured: item.is_featured ?? false,
+      isArchived: (item as { is_archived?: boolean | null }).is_archived ?? false,
       createdAt: item.created_at,
     };
   });

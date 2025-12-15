@@ -15,7 +15,7 @@ export default async function AdminAboutPage() {
   const { data } = await supabase
     .from("site_settings")
     .select(
-      "about_enabled, about_title, about_body, about_image1_url, about_image2_url",
+      "about_enabled, about_label, about_title, about_body, about_image1_url, about_image2_url",
     )
     .order("created_at", { ascending: false })
     .limit(1)
@@ -24,6 +24,7 @@ export default async function AdminAboutPage() {
   const initialValues = data
     ? {
         aboutEnabled: (data as { about_enabled?: boolean }).about_enabled ?? false,
+        aboutLabel: (data as { about_label?: string | null }).about_label ?? "About us",
         aboutTitle: (data as { about_title?: string | null }).about_title ?? "",
         aboutBody: (data as { about_body?: string | null }).about_body ?? "",
         aboutImage1Url:
