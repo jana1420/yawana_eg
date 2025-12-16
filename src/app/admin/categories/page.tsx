@@ -13,7 +13,7 @@ export default async function AdminCategoriesPage() {
 
   const { data: categories } = await supabase
     .from("categories")
-    .select("id, name, slug, is_featured, created_at")
+    .select("id, name, slug, is_featured, image_url, created_at")
     .order("created_at", { ascending: false });
 
   return (
@@ -55,8 +55,24 @@ export default async function AdminCategoriesPage() {
                   key={category.id}
                   className="grid grid-cols-1 items-start gap-2 px-4 py-3 text-xs hover:bg-muted/60 sm:grid-cols-[1.6fr_1.2fr_1fr_auto] sm:items-center"
                 >
-                  <div className="space-y-0.5">
-                    <p className="font-medium tracking-tight">{category.name}</p>
+                  <div className="flex items-center gap-3">
+                    {category.image_url && (
+                      <div className="hidden h-10 w-10 overflow-hidden rounded-md border border-border bg-muted sm:block">
+                        <img
+                          src={category.image_url}
+                          alt={category.name}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="space-y-0.5">
+                      <p className="font-medium tracking-tight">{category.name}</p>
+                      {category.image_url && (
+                        <p className="text-[11px] text-muted-foreground">
+                          Has image for home section
+                        </p>
+                      )}
+                    </div>
                   </div>
                   <span className="font-mono text-[11px] text-muted-foreground break-all sm:break-normal">
                     {category.slug}

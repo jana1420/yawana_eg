@@ -14,6 +14,7 @@ type CategoryFormProps = {
     name: string;
     slug: string;
     isFeatured: boolean;
+    imageUrl?: string | null;
   };
 };
 
@@ -26,6 +27,8 @@ export function CategoryForm({ mode, categoryId, initialValues }: CategoryFormPr
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState(initialValues?.imageUrl ?? "");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -35,6 +38,7 @@ export function CategoryForm({ mode, categoryId, initialValues }: CategoryFormPr
       name,
       slug,
       isFeatured,
+      imageUrl: imageUrl.trim() || undefined,
     };
 
     setIsSubmitting(true);
@@ -62,11 +66,49 @@ export function CategoryForm({ mode, categoryId, initialValues }: CategoryFormPr
         setIsSubmitting(false);
         return;
       }
-
       router.push("/admin/categories");
     } catch {
       setError("Network error. Please try again.");
       setIsSubmitting(false);
+    }
+  }
+
+  async function handleImageUpload(
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 500 * 1024) {
+      setError("Image size must be 500KB or less.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setIsUploadingImage(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/admin/upload-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = (await response.json()) as { url?: string; error?: string };
+
+      if (!response.ok || !data.url) {
+        setError(data.error ?? "Unable to upload image.");
+        setIsUploadingImage(false);
+        return;
+      }
+
+      setImageUrl(data.url);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setIsUploadingImage(false);
     }
   }
 
@@ -113,6 +155,55 @@ export function CategoryForm({ mode, categoryId, initialValues }: CategoryFormPr
           required
           className="h-9 text-sm"
         />
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-xs font-medium text-muted-foreground">
+          Category image
+        </label>
+        <div className="space-y-2">
+          {imageUrl && (
+            <div className="flex items-center gap-3">
+              <div className="h-14 w-14 overflow-hidden rounded-md border border-border bg-muted">
+                <img
+                  src={imageUrl}
+                  alt={name || "Category image"}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => setImageUrl("")}
+                className="text-[11px] text-muted-foreground underline-offset-4 hover:underline"
+              >
+                Remove image
+              </button>
+            </div>
+          )}
+
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <Input
+              value={imageUrl}
+              onChange={(event) => setImageUrl(event.target.value)}
+              placeholder="https://..."
+              className="h-9 text-sm"
+            />
+            <label className="inline-flex h-9 cursor-pointer items-center justify-center rounded-md border border-input bg-background px-3 text-[11px] font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground">
+              <span>{isUploadingImage ? "Uploading..." : "Upload"}</span>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageUpload}
+                disabled={isUploadingImage || isSubmitting || isDeleting}
+              />
+            </label>
+          </div>
+
+          <p className="text-[11px] text-muted-foreground">
+            Used in the home page "Shop by category" section. Recommended tall image.
+          </p>
+        </div>
       </div>
 
       <div className="space-y-2">

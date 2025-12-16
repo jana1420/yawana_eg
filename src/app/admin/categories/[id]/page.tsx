@@ -22,7 +22,7 @@ export default async function AdminEditCategoryPage({ params }: PageProps) {
 
   const { data: category } = await supabase
     .from("categories")
-    .select("id, name, slug, is_featured")
+    .select("id, name, slug, is_featured, image_url")
     .eq("id", id)
     .maybeSingle();
 
@@ -50,6 +50,7 @@ export default async function AdminEditCategoryPage({ params }: PageProps) {
               name: category.name,
               slug: category.slug,
               isFeatured: category.is_featured ?? false,
+              imageUrl: (category as { image_url?: string | null }).image_url ?? null,
             }}
           />
         </CardContent>

@@ -48,7 +48,7 @@ export function AboutSection({ siteSettings }: AboutSectionProps) {
                 <img
                   src={url}
                   alt="About us"
-                  className="h-40 w-full object-cover sm:h-56"
+                  className="w-full h-auto max-h-64 object-cover sm:h-56 sm:max-h-none"
                 />
               </div>
             ))}

@@ -71,14 +71,36 @@ export default async function Home({ searchParams }: HomeProps) {
 
   const { data: categoryRows } = await supabase
     .from("categories")
-    .select("id, name, slug")
+    .select("id, name, slug, is_featured, image_url")
     .order("name", { ascending: true });
 
-  const categories = (categoryRows ?? []) as {
+  const rawCategories = (categoryRows ?? []) as {
     id: string;
     name: string;
     slug: string;
+    is_featured?: boolean | null;
+    image_url?: string | null;
   }[];
+
+  const categories = rawCategories.map((item) => ({
+    id: item.id,
+    name: item.name,
+    slug: item.slug,
+  }));
+
+  const shopByCategoryCards = rawCategories
+    .filter((item) =>
+      (item.is_featured ?? false) &&
+      typeof item.image_url === "string" &&
+      item.image_url.trim().length > 0,
+    )
+    .slice(0, 4)
+    .map((item) => ({
+      id: item.id,
+      name: item.name,
+      slug: item.slug,
+      imageUrl: item.image_url as string,
+    }));
 
   let dbQuery = supabase
     .from("products")
@@ -144,7 +166,6 @@ export default async function Home({ searchParams }: HomeProps) {
   return (
     <div className="space-y-12 pb-12 pt-10">
       <HeroSection siteSettings={siteSettings} />
-
       {newArrivals.length > 0 && (
         <section className="space-y-4">
           <div className="flex items-center justify-between gap-3">
@@ -164,6 +185,44 @@ export default async function Home({ searchParams }: HomeProps) {
         </section>
       )}
 
+      {shopByCategoryCards.length > 0 && (
+        <section className="space-y-4">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h2 className="text-sm font-medium tracking-tight">
+                Shop by category
+              </h2>
+            </div>
+            <Link
+              href="/categories"
+              className="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-md border border-input bg-background px-3 text-[11px] font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              View all
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+            {shopByCategoryCards.map((category) => (
+              <Link
+                key={category.id}
+                href={`/categories/${category.slug}`}
+                className="group space-y-2"
+              >
+                <div className="overflow-hidden rounded-3xl border border-border/70 bg-card shadow-sm">
+                  <img
+                    src={category.imageUrl}
+                    alt={category.name}
+                    className="h-44 w-full object-cover sm:h-56"
+                  />
+                </div>
+                <p className="text-center text-[11px] font-medium tracking-[0.18em] uppercase text-foreground group-hover:text-primary">
+                  {category.name}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       <FeaturedProductsSection
         products={products}
         categories={categories}
@@ -179,10 +238,10 @@ export default async function Home({ searchParams }: HomeProps) {
               Stay in the loop
             </p>
             <h2 className="text-lg font-semibold tracking-tight sm:text-xl">
-              Subscribe for new drops & special offers
+              Join the Loosebrand list
             </h2>
             <p className="text-xs text-muted-foreground">
-              Be the first to know about new arrivals, restocks, and limited collections.
+              Be the first to discover new pieces, restocks, and limited edits.
             </p>
           </div>
           <div className="w-full max-w-md space-y-2 sm:w-auto sm:space-y-1">
@@ -196,11 +255,11 @@ export default async function Home({ searchParams }: HomeProps) {
                 type="button"
                 className="h-9 px-4 text-sm font-medium"
               >
-                Subscribe
+                Join us
               </Button>
             </div>
             <p className="text-[11px] text-muted-foreground">
-              No spam. Just occasional updates about LooseBrand pieces.
+              No spam. Only thoughtful updates from Loosebrand.
             </p>
           </div>
         </div>

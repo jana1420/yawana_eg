@@ -37,6 +37,7 @@ const productSchema = z.object({
     .optional()
     .default([]),
   categoryId: z.string().uuid().nullable().or(z.literal("")),
+  categoryIds: z.array(z.string().uuid()).optional().default([]),
   isFeatured: z.boolean(),
 });
 
@@ -59,6 +60,16 @@ export async function PATCH(
   }
 
   const value = parsed.data;
+
+  const rawCategoryIds =
+    value.categoryIds && value.categoryIds.length > 0
+      ? value.categoryIds
+      : value.categoryId && value.categoryId !== ""
+        ? [value.categoryId]
+        : [];
+
+  const categoryIds = rawCategoryIds.filter((id) => typeof id === "string" && id.length > 0);
+  const primaryCategoryId = categoryIds[0] ?? null;
 
   const { id: routeId } = await context.params;
 
@@ -89,7 +100,7 @@ export async function PATCH(
       size_stock: value.sizeStock ?? [],
       colors: value.colors ?? [],
       color_stock: value.colorStock ?? [],
-      category_id: value.categoryId || null,
+      category_id: primaryCategoryId,
       is_featured: value.isFeatured,
     })
     .eq("id", effectiveId);
@@ -101,6 +112,39 @@ export async function PATCH(
         status: 500,
       },
     );
+  }
+
+  // Sync product_categories join table
+  const { error: deleteLinksError } = await supabase
+    .from("product_categories")
+    .delete()
+    .eq("product_id", effectiveId);
+
+  if (deleteLinksError) {
+    return NextResponse.json(
+      { error: deleteLinksError.message ?? "Could not update product categories" },
+      { status: 500 },
+    );
+  }
+
+  if (categoryIds.length > 0) {
+    const uniqueCategoryIds = Array.from(new Set(categoryIds));
+
+    const { error: insertLinksError } = await supabase
+      .from("product_categories")
+      .insert(
+        uniqueCategoryIds.map((categoryId) => ({
+          product_id: effectiveId,
+          category_id: categoryId,
+        })),
+      );
+
+    if (insertLinksError) {
+      return NextResponse.json(
+        { error: insertLinksError.message ?? "Could not update product categories" },
+        { status: 500 },
+      );
+    }
   }
 
   await logAdminActivity(supabase, adminProfileId, {

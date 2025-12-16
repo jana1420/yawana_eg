@@ -35,6 +35,7 @@ type ProductFormProps = {
       imageUrl?: string | null;
     }[];
     categoryId: string | null;
+    categoryIds?: string[] | null;
     isFeatured: boolean;
   };
   categories: CategoryOption[];
@@ -129,9 +130,15 @@ export function ProductForm({
     }));
   });
 
-  const [categoryId, setCategoryId] = useState(
-    initialValues?.categoryId ?? "",
-  );
+  const [categoryIds, setCategoryIds] = useState<string[]>(() => {
+    if (initialValues?.categoryIds && initialValues.categoryIds.length > 0) {
+      return Array.from(new Set(initialValues.categoryIds));
+    }
+    if (initialValues?.categoryId) {
+      return [initialValues.categoryId];
+    }
+    return [];
+  });
   const [isFeatured, setIsFeatured] = useState(
     initialValues?.isFeatured ?? false,
   );
@@ -462,6 +469,8 @@ export function ProductForm({
 
     const colors = cleanedColorRows.map((row) => row.color);
 
+    const primaryCategoryId = categoryIds[0] ?? null;
+
     const payload = {
       id: mode === "edit" ? effectiveProductId : undefined,
       name,
@@ -476,7 +485,8 @@ export function ProductForm({
       sizeStock: sizeStockPayload,
       colors,
       colorStock: colorStockPayload,
-      categoryId: categoryId || null,
+      categoryId: primaryCategoryId,
+      categoryIds,
       isFeatured,
     };
 
@@ -611,6 +621,15 @@ export function ProductForm({
 
   function handleRemoveColorRow(index: number) {
     setColorRows((rows) => rows.filter((_, i) => i !== index));
+  }
+
+  function handleToggleCategory(categoryId: string) {
+    setCategoryIds((current) => {
+      if (current.includes(categoryId)) {
+        return current.filter((id) => id !== categoryId);
+      }
+      return [...current, categoryId];
+    });
   }
 
   return (
@@ -806,20 +825,39 @@ export function ProductForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <label className="block text-xs font-medium text-muted-foreground">
-            Category
+            Categories
           </label>
-          <select
-            value={categoryId}
-            onChange={(event) => setCategoryId(event.target.value)}
-            className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <option value="">Uncategorized</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+          <div className="space-y-1 rounded-md border border-input bg-background px-3 py-2 text-xs shadow-sm">
+            {categories.length === 0 ? (
+              <p className="text-[11px] text-muted-foreground">
+                No categories defined yet.
+              </p>
+            ) : (
+              <div className="grid gap-1 sm:grid-cols-2">
+                {categories.map((category) => {
+                  const checked = categoryIds.includes(category.id);
+                  return (
+                    <label
+                      key={category.id}
+                      className="flex items-center gap-2 text-[11px] text-muted-foreground"
+                    >
+                      <input
+                        type="checkbox"
+                        className="h-3 w-3 rounded border-input"
+                        checked={checked}
+                        onChange={() => handleToggleCategory(category.id)}
+                      />
+                      <span>{category.name}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+          <p className="text-[11px] text-muted-foreground">
+            You can select more than one category. The first selected will be
+            treated as the primary category.
+          </p>
         </div>
         <div className="space-y-2">
           <label className="block text-xs font-medium text-muted-foreground">

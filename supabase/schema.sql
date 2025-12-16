@@ -7,6 +7,7 @@ create table public.categories (
   name text not null,
   slug text not null unique,
   is_featured boolean not null default false,
+  image_url text,
   created_at timestamptz not null default now()
 );
 
@@ -69,12 +70,22 @@ create index products_category_id_idx on public.products (category_id);
 create index products_is_featured_idx on public.products (is_featured);
 create index products_created_at_idx on public.products (created_at);
 
+create table public.product_categories (
+  product_id uuid not null references public.products(id) on delete cascade,
+  category_id uuid not null references public.categories(id) on delete cascade,
+  primary key (product_id, category_id)
+);
+
+create index product_categories_category_id_idx on public.product_categories (category_id);
+create index product_categories_product_id_idx on public.product_categories (product_id);
+
 create index orders_user_id_idx on public.orders (user_id);
 create index orders_created_at_idx on public.orders (created_at);
 create index orders_status_idx on public.orders (status);
 
 alter table public.categories enable row level security;
 alter table public.products enable row level security;
+alter table public.product_categories enable row level security;
 alter table public.user_profiles enable row level security;
 alter table public.orders enable row level security;
 alter table public.order_items enable row level security;
@@ -82,6 +93,10 @@ alter table public.order_items enable row level security;
 create policy "Public read categories" on public.categories for select using (true);
 
 create policy "Public read products" on public.products for select using (true);
+
+create policy "Public read product categories" on public.product_categories
+  for select
+  using (true);
 
 create policy "Users can view own profile" on public.user_profiles for select using (auth.uid() = user_id);
 
@@ -100,6 +115,11 @@ create policy "Users can view own order items" on public.order_items for select 
 create policy "Admins manage products" on public.products for all using (exists (select 1 from public.user_profiles p where p.user_id = auth.uid() and p.role = 'admin')) with check (exists (select 1 from public.user_profiles p where p.user_id = auth.uid() and p.role = 'admin'));
 
 create policy "Admins manage categories" on public.categories for all using (exists (select 1 from public.user_profiles p where p.user_id = auth.uid() and p.role = 'admin')) with check (exists (select 1 from public.user_profiles p where p.user_id = auth.uid() and p.role = 'admin'));
+
+create policy "Admins manage product categories" on public.product_categories
+  for all
+  using (exists (select 1 from public.user_profiles p where p.user_id = auth.uid() and p.role = 'admin'))
+  with check (exists (select 1 from public.user_profiles p where p.user_id = auth.uid() and p.role = 'admin'));
 
 create policy "Users insert own order items" on public.order_items
   for insert

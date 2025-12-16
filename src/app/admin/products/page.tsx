@@ -20,19 +20,33 @@ export default async function AdminProductsPage() {
     redirect("/login?from=/admin/products");
   }
 
-  const { data: products } = await supabase
-    .from("products")
-    .select(
-      "id, name, slug, sku, price, sale_price, stock, is_featured, is_archived, created_at, images, category_id, categories(name)",
-    )
-    .order("created_at", { ascending: false });
+  const [{ data: products }, { data: categories }] = await Promise.all([
+    supabase
+      .from("products")
+      .select(
+        "id, name, slug, sku, price, sale_price, stock, is_featured, is_archived, created_at, images, category_id",
+      )
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("categories")
+      .select("id, name"),
+  ]);
+
+  const categoryNameById = new Map<string, string>();
+
+  for (const category of categories ?? []) {
+    const id = (category as { id?: string }).id;
+    const name = (category as { name?: string | null }).name;
+    if (id && name) {
+      categoryNameById.set(id, name);
+    }
+  }
 
   const rows = (products ?? []).map((product) => {
     const salePrice = (product as { sale_price?: number | null }).sale_price;
     const images = (product as { images?: string[] | null }).images ?? [];
-    const categoryName = (product as {
-      categories?: { name?: string | null } | null;
-    }).categories?.name;
+    const categoryId = (product as { category_id?: string | null }).category_id ?? null;
+    const categoryName = categoryId ? categoryNameById.get(categoryId) ?? null : null;
 
     return {
       id: product.id as string,

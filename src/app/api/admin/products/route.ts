@@ -36,6 +36,7 @@ const productSchema = z.object({
     .optional()
     .default([]),
   categoryId: z.string().uuid().nullable().or(z.literal("")),
+  categoryIds: z.array(z.string().uuid()).optional().default([]),
   isFeatured: z.boolean(),
 });
 
@@ -56,6 +57,16 @@ export async function POST(request: Request) {
 
   const value = parsed.data;
 
+  const rawCategoryIds =
+    value.categoryIds && value.categoryIds.length > 0
+      ? value.categoryIds
+      : value.categoryId && value.categoryId !== ""
+        ? [value.categoryId]
+        : [];
+
+  const categoryIds = rawCategoryIds.filter((id) => typeof id === "string" && id.length > 0);
+  const primaryCategoryId = categoryIds[0] ?? null;
+
   const { data, error } = await supabase
     .from("products")
     .insert({
@@ -71,7 +82,7 @@ export async function POST(request: Request) {
       size_stock: value.sizeStock ?? [],
       colors: value.colors ?? [],
       color_stock: value.colorStock ?? [],
-      category_id: value.categoryId || null,
+      category_id: primaryCategoryId,
       is_featured: value.isFeatured,
       is_archived: false,
     })
@@ -82,6 +93,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Could not create product" }, {
       status: 500,
     });
+  }
+
+  if (categoryIds.length > 0) {
+    const uniqueCategoryIds = Array.from(new Set(categoryIds));
+
+    const { error: linkError } = await supabase
+      .from("product_categories")
+      .insert(
+        uniqueCategoryIds.map((categoryId) => ({
+          product_id: data.id,
+          category_id: categoryId,
+        })),
+      );
+
+    if (linkError) {
+      return NextResponse.json(
+        { error: linkError.message ?? "Could not save product categories" },
+        { status: 500 },
+      );
+    }
   }
 
   await logAdminActivity(supabase, adminProfileId, {

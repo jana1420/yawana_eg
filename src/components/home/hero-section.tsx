@@ -172,13 +172,13 @@ export function HeroSection({ siteSettings }: HeroSectionProps) {
       )}
 
       <div
-        className={`flex flex-col justify-center gap-4 sm:gap-5 px-4 py-8 sm:px-10 md:px-16 ${
+        className={`flex flex-col justify-end sm:justify-center gap-3 sm:gap-5 px-4 py-8 sm:px-10 md:px-16 ${
           hasHeroImage
             ? "absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-transparent text-white pointer-events-none"
             : "text-foreground pointer-events-none"
         }`}
       >
-        <div className="space-y-3 sm:space-y-4 pointer-events-auto">
+        <div className="order-2 space-y-3 sm:order-1 sm:space-y-4 pointer-events-auto">
           <h1 className="max-w-2xl text-lg font-semibold tracking-tight sm:text-2xl md:text-3xl">
             {heroTitle}
           </h1>
@@ -190,7 +190,7 @@ export function HeroSection({ siteSettings }: HeroSectionProps) {
             {heroSubtitle}
           </p>
         </div>
-        <div className="mt-6 sm:mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6 pointer-events-auto">
+        <div className="order-1 mt-3 sm:order-2 sm:mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6 pointer-events-auto">
           <div className="flex gap-3">
             <a
               href="/all-products"

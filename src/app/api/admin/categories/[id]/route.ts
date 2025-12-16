@@ -8,6 +8,7 @@ const categorySchema = z.object({
   name: z.string().min(1),
   slug: z.string().min(1),
   isFeatured: z.boolean().optional().default(false),
+  imageUrl: z.string().optional(),
 });
 
 export async function PATCH(
@@ -37,6 +38,7 @@ export async function PATCH(
       name: value.name,
       slug: value.slug,
       is_featured: value.isFeatured ?? false,
+      image_url: value.imageUrl ?? null,
     })
     .eq("id", id);
 

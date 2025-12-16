@@ -20,18 +20,23 @@ export default async function AdminEditProductPage({ params }: PageProps) {
     redirect("/login?from=/admin/products");
   }
 
-  const [{ data: product }, { data: categories }] = await Promise.all([
-    supabase
-      .from("products")
-      .select(
-        "id, name, slug, sku, description, price, sale_price, stock, images, sizes, size_stock, colors, color_stock, category_id, is_featured",
-      )
-      .eq("id", id)
-      .maybeSingle(),
-    supabase.from("categories").select("id, name").order("name", {
-      ascending: true,
-    }),
-  ]);
+  const [{ data: product }, { data: categories }, { data: productCategoryRows }] =
+    await Promise.all([
+      supabase
+        .from("products")
+        .select(
+          "id, name, slug, sku, description, price, sale_price, stock, images, sizes, size_stock, colors, color_stock, category_id, is_featured",
+        )
+        .eq("id", id)
+        .maybeSingle(),
+      supabase.from("categories").select("id, name").order("name", {
+        ascending: true,
+      }),
+      supabase
+        .from("product_categories")
+        .select("category_id")
+        .eq("product_id", id),
+    ]);
 
   if (!product) {
     return notFound();
@@ -59,6 +64,18 @@ export default async function AdminEditProductPage({ params }: PageProps) {
         })
         .filter(Boolean) as { size: string; stock: number }[])
     : [];
+
+  const categoryIdsFromJoin = (productCategoryRows ?? [])
+    .map((row) => (row as { category_id?: string | null }).category_id)
+    .filter((id): id is string => typeof id === "string" && id.length > 0);
+
+  const primaryCategoryId = (product as { category_id?: string | null }).category_id ?? null;
+
+  const initialCategoryIds = categoryIdsFromJoin.length
+    ? Array.from(new Set(categoryIdsFromJoin))
+    : primaryCategoryId
+      ? [primaryCategoryId]
+      : [];
 
   const colors = Array.isArray((product as { colors?: unknown }).colors)
     ? ((product as { colors?: string[] }).colors ?? [])
@@ -128,7 +145,8 @@ export default async function AdminEditProductPage({ params }: PageProps) {
               sizeStock,
               colors,
               colorStock,
-              categoryId: product.category_id ?? null,
+              categoryId: primaryCategoryId,
+              categoryIds: initialCategoryIds,
               isFeatured: product.is_featured ?? false,
             }}
           />
