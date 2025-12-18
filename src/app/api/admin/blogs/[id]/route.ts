@@ -9,6 +9,7 @@ const blogSchema = z.object({
   slug: z.string().min(1),
   excerpt: z.string().optional().nullable(),
   coverImageUrl: z.string().url().optional().nullable(),
+  videoUrl: z.string().url().optional().nullable(),
   content: z.string().min(1),
   isPublished: z.boolean().optional().default(true),
 });
@@ -40,6 +41,7 @@ export async function PATCH(
       slug: value.slug,
       excerpt: value.excerpt ?? null,
       cover_image_url: value.coverImageUrl ?? null,
+      video_url: value.videoUrl ?? null,
       content_html: value.content,
       is_published: value.isPublished ?? true,
     })

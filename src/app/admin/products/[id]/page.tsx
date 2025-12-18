@@ -25,7 +25,7 @@ export default async function AdminEditProductPage({ params }: PageProps) {
       supabase
         .from("products")
         .select(
-          "id, name, slug, sku, description, price, sale_price, stock, images, sizes, size_stock, colors, color_stock, category_id, is_featured",
+          "id, name, slug, sku, description, long_description, price, sale_price, stock, images, sizes, size_stock, colors, color_stock, category_id, is_featured",
         )
         .eq("id", id)
         .maybeSingle(),

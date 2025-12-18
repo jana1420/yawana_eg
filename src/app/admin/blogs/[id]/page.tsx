@@ -4,6 +4,7 @@ import { getAdminSupabase } from "@/lib/admin";
 import { Card, CardContent } from "@/components/ui/card";
 import { AdminQuickNav } from "@/components/admin/admin-quick-nav";
 import { BlogForm } from "@/components/admin/blog-form";
+import { BlogDeleteButton } from "@/components/admin/blog-delete-button";
 
 type PageProps = {
   params: Promise<{
@@ -23,7 +24,7 @@ export default async function AdminEditBlogPage({ params }: PageProps) {
   const { data } = await supabase
     .from("blog_posts")
     .select(
-      "id, title, slug, excerpt, cover_image_url, content_html, is_published",
+      "id, title, slug, excerpt, cover_image_url, video_url, content_html, is_published",
     )
     .eq("id", id)
     .maybeSingle();
@@ -38,6 +39,10 @@ export default async function AdminEditBlogPage({ params }: PageProps) {
     excerpt: (data as { excerpt?: string | null }).excerpt ?? null,
     coverImageUrl:
       ((data as { cover_image_url?: string | null }).cover_image_url ?? null) as
+        | string
+        | null,
+    videoUrl:
+      ((data as { video_url?: string | null }).video_url ?? null) as
         | string
         | null,
     content: ((data as { content_html?: string | null }).content_html ?? "") as string,
@@ -61,6 +66,7 @@ export default async function AdminEditBlogPage({ params }: PageProps) {
       <Card>
         <CardContent className="p-6">
           <BlogForm mode="edit" blogId={id} initialValues={initialValues} />
+          <BlogDeleteButton blogId={id} />
         </CardContent>
       </Card>
     </div>

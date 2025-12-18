@@ -17,6 +17,7 @@ type BlogFormProps = {
     slug: string;
     excerpt?: string | null;
     coverImageUrl?: string | null;
+    videoUrl?: string | null;
     content: string;
     isPublished: boolean;
   };
@@ -41,6 +42,7 @@ export function BlogForm({ mode, blogId, initialValues }: BlogFormProps) {
   const [coverImageUrl, setCoverImageUrl] = useState(
     initialValues?.coverImageUrl ?? "",
   );
+  const [videoUrl, setVideoUrl] = useState(initialValues?.videoUrl ?? "");
   const [content, setContent] = useState(initialValues?.content ?? "");
   const [isPublished, setIsPublished] = useState(
     initialValues?.isPublished ?? true,
@@ -135,6 +137,7 @@ export function BlogForm({ mode, blogId, initialValues }: BlogFormProps) {
       slug: trimmedSlug,
       excerpt: excerpt.trim() || null,
       coverImageUrl: coverImageUrl.trim() || null,
+      videoUrl: videoUrl.trim() || null,
       content: trimmedContent,
       isPublished,
     };
@@ -267,6 +270,25 @@ export function BlogForm({ mode, blogId, initialValues }: BlogFormProps) {
             Used in the blog list. JPEG or PNG up to 500KB.
           </p>
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-xs font-medium text-muted-foreground">
+          Video link (optional)
+        </label>
+        <Input
+          value={videoUrl}
+          onChange={(event) => {
+            setVideoUrl(event.target.value);
+            setError(null);
+          }}
+          placeholder="https://www.instagram.com/... or https://www.youtube.com/..."
+          className="h-9 text-sm"
+        />
+        <p className="text-[11px] text-muted-foreground">
+          Link to a reel or video for this story. A "Watch video" link will
+          appear on the blog page.
+        </p>
       </div>
 
       <div className="space-y-2">

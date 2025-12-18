@@ -21,6 +21,7 @@ type ProductFormProps = {
     slug: string;
     sku?: string | null;
     description: string | null;
+    longDescription?: string | null;
     priceCents: number;
     salePriceCents?: number | null;
     stock: number;
@@ -61,6 +62,9 @@ export function ProductForm({
   const [sku, setSku] = useState(initialValues?.sku ?? "");
   const [description, setDescription] = useState(
     initialValues?.description ?? "",
+  );
+  const [longDescription, setLongDescription] = useState(
+    initialValues?.longDescription ?? "",
   );
   const [price, setPrice] = useState(
     initialValues ? (initialValues.priceCents / 100).toString() : "",
@@ -478,6 +482,7 @@ export function ProductForm({
       slug,
       sku: sku.trim() || null,
       description: description || null,
+      longDescription: longDescription || null,
       priceCents,
       salePriceCents,
       stock: stockNumber,
@@ -681,6 +686,23 @@ export function ProductForm({
           rows={3}
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-xs shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-xs font-medium text-muted-foreground">
+          Long description (optional)
+        </label>
+        <textarea
+          value={longDescription}
+          onChange={(event) => setLongDescription(event.target.value)}
+          rows={4}
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-xs shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          placeholder="More detailed story or care instructions. Shows under the shipping info on the product page."
+        />
+        <p className="text-[11px] text-muted-foreground">
+          Shown under the shipping/returns text on the product page. Line breaks
+          are preserved.
+        </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

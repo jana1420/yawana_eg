@@ -287,6 +287,12 @@ export function ProductDetails({
         <p>Easy 30-day returns on all clothing.</p>
       </div>
 
+      {product.longDescription && (
+        <div className="space-y-2 pt-2 text-xs text-muted-foreground">
+          <p className="whitespace-pre-line">{product.longDescription}</p>
+        </div>
+      )}
+
       <ProductReviews product={product} />
     </div>
   );
