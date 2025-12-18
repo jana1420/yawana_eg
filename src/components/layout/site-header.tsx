@@ -138,14 +138,14 @@ export function SiteHeader() {
       <header className="sticky top-0 z-30 border-b bg-background/75 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:grid md:grid-cols-[1fr_auto_1fr] md:py-4">
           <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex md:justify-self-start">
-            <span className="hover:text-foreground">
-              {labels.newArrivals}
-            </span>
             <Link href="/all-products" className="hover:text-foreground">
               {labels.allProducts}
             </Link>
             <Link href="/categories" className="hover:text-foreground">
               {labels.bestSellers}
+            </Link>
+            <Link href="/blog" className="hover:text-foreground">
+              {labels.newArrivals}
             </Link>
             <Link href="/contact" className="hover:text-foreground">
               {labels.contact}
@@ -238,13 +238,6 @@ export function SiteHeader() {
                 </button>
               </div>
               <nav className="space-y-1 text-base font-medium text-foreground">
-                <button
-                  type="button"
-                  className="block w-full rounded-lg px-3 py-2.5 text-left hover:bg-muted/80"
-                  onClick={() => setIsMobileNavOpen(false)}
-                >
-                  {labels.newArrivals}
-                </button>
                 <Link
                   href="/all-products"
                   className="block rounded-lg px-3 py-2.5 hover:bg-muted/80"
@@ -258,6 +251,13 @@ export function SiteHeader() {
                   onClick={() => setIsMobileNavOpen(false)}
                 >
                   {labels.bestSellers}
+                </Link>
+                <Link
+                  href="/blog"
+                  className="block rounded-lg px-3 py-2.5 hover:bg-muted/80"
+                  onClick={() => setIsMobileNavOpen(false)}
+                >
+                  {labels.newArrivals}
                 </Link>
                 <Link
                   href="/contact"
