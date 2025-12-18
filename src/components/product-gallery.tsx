@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 type ProductGalleryProps = {
@@ -17,6 +17,19 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   const activeImage = validImages[activeIndex] ?? validImages[0] ?? null;
+
+  // Preload all other images so switching thumbnails feels instant
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (validImages.length <= 1) return;
+
+    const [, ...rest] = validImages;
+    for (const src of rest) {
+      if (!src || typeof src !== "string") continue;
+      const img = new window.Image();
+      img.src = src;
+    }
+  }, [validImages]);
 
   if (!activeImage && validImages.length === 0) {
     return (
@@ -44,6 +57,8 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
             <Image
               src={activeImage}
               alt={name}
+              priority
+              unoptimized
               fill
               sizes="(min-width: 1024px) 40vw, (min-width: 768px) 50vw, 100vw"
               className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
@@ -76,6 +91,7 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
                   <Image
                     src={src}
                     alt={name}
+                    unoptimized
                     fill
                     sizes="80px"
                     className="h-full w-full object-cover"
@@ -99,6 +115,7 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
             <Image
               src={activeImage}
               alt={name}
+              unoptimized
               fill
               sizes="100vw"
               className="h-full w-full max-w-full cursor-zoom-in object-contain transition-transform duration-200 ease-out hover:scale-110"

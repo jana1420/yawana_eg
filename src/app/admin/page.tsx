@@ -289,7 +289,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
           Admin dashboard
         </h1>
         <p className="text-sm text-muted-foreground">
-          Overview of LooseBrand store performance.
+          Overview of RimalTold store performance.
         </p>
       </div>
 

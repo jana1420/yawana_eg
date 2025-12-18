@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -785,9 +786,13 @@ export function ProductForm({
                     className="space-y-1 rounded-md border border-input bg-background p-2"
                   >
                     <div className="aspect-square w-full overflow-hidden rounded-md border border-input bg-muted">
-                      <img
+                      <Image
                         src={url}
                         alt={isMain ? "Main product image" : "Product image"}
+                        unoptimized
+                        width={256}
+                        height={256}
+                        sizes="160px"
                         className="h-full w-full object-cover"
                       />
                     </div>
@@ -984,9 +989,13 @@ export function ProductForm({
                     </Button>
                     {row.imageUrl && (
                       <div className="h-8 w-8 overflow-hidden rounded-md border border-input bg-muted">
-                        <img
+                        <Image
                           src={row.imageUrl}
                           alt={`${row.color || "Color"} preview`}
+                          unoptimized
+                          width={32}
+                          height={32}
+                          sizes="32px"
                           className="h-full w-full object-cover"
                         />
                       </div>

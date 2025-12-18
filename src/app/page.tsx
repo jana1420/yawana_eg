@@ -171,7 +171,7 @@ export default async function Home({ searchParams }: HomeProps) {
           <div className="flex items-center justify-between gap-3">
             <div>
               <h2 className="text-sm font-medium tracking-tight">
-                FALL/WINTER '26
+                New Arrivals
               </h2>
             </div>
             <Link
@@ -238,7 +238,7 @@ export default async function Home({ searchParams }: HomeProps) {
               Stay in the loop
             </p>
             <h2 className="text-lg font-semibold tracking-tight sm:text-xl">
-              Join the Loosebrand list
+              Join the RimalTold list
             </h2>
             <p className="text-xs text-muted-foreground">
               Be the first to discover new pieces, restocks, and limited edits.
@@ -259,7 +259,7 @@ export default async function Home({ searchParams }: HomeProps) {
               </Button>
             </div>
             <p className="text-[11px] text-muted-foreground">
-              No spam. Only thoughtful updates from Loosebrand.
+              No spam. Only thoughtful updates from RimalTold.
             </p>
           </div>
         </div>

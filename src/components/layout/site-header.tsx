@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Menu, ShoppingBag, User, X } from "lucide-react";
 
 import { useCart } from "@/components/cart/cart-provider";
-import LooseBrandLogo from "../../../Loose Brand logo.png";
+import RimalToldLogo from "../../../rimal logo.png";
 
 export function SiteHeader() {
   const { cart } = useCart();
@@ -120,7 +120,7 @@ export function SiteHeader() {
   const isArabic = language === "ar";
 
   const labels = {
-    newArrivals: isArabic ? "وصل حديثاً" : "FALL/WINTER ‘26",
+    newArrivals: isArabic ? "وصل حديثاً" : "Told By Rimal",
     allProducts: isArabic ? "كل المنتجات" : "All products",
     bestSellers: isArabic ? "تسوق حسب الفئة" : "Shop by category",
     contact: isArabic ? "اتصل بنا" : "Contact",
@@ -138,9 +138,9 @@ export function SiteHeader() {
       <header className="sticky top-0 z-30 border-b bg-background/75 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:grid md:grid-cols-[1fr_auto_1fr] md:py-4">
           <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex md:justify-self-start">
-            <Link href="/" className="hover:text-foreground">
+            <span className="hover:text-foreground">
               {labels.newArrivals}
-            </Link>
+            </span>
             <Link href="/all-products" className="hover:text-foreground">
               {labels.allProducts}
             </Link>
@@ -156,8 +156,8 @@ export function SiteHeader() {
             className="flex items-center justify-center gap-2 md:justify-self-center"
           >
             <Image
-              src={LooseBrandLogo}
-              alt="Loose Brand"
+              src={RimalToldLogo}
+              alt="RimalTold"
               className="h-10 w-auto sm:h-14 md:h-16"
               priority
             />
@@ -238,13 +238,13 @@ export function SiteHeader() {
                 </button>
               </div>
               <nav className="space-y-1 text-base font-medium text-foreground">
-                <Link
-                  href="/"
-                  className="block rounded-lg px-3 py-2.5 hover:bg-muted/80"
+                <button
+                  type="button"
+                  className="block w-full rounded-lg px-3 py-2.5 text-left hover:bg-muted/80"
                   onClick={() => setIsMobileNavOpen(false)}
                 >
                   {labels.newArrivals}
-                </Link>
+                </button>
                 <Link
                   href="/all-products"
                   className="block rounded-lg px-3 py-2.5 hover:bg-muted/80"

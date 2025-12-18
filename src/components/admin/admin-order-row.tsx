@@ -224,7 +224,7 @@ export function AdminOrderRow({ order }: AdminOrderRowProps) {
     lines.push(
       "",
       "Customer support on WhatsApp: +201027741885",
-      "خدمة عملاء LooseBrand على واتساب: +201027741885",
+      "خدمة عملاء RimalTold على واتساب: +201027741885",
     );
     const msg = lines.join("\n");
 

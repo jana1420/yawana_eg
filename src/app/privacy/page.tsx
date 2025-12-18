@@ -19,7 +19,7 @@ export default async function PrivacyPage() {
           Privacy policy
         </h1>
         <p className="text-sm text-muted-foreground">
-          How LooseBrand collects, uses, and protects your information.
+          How RimalTold collects, uses, and protects your information.
         </p>
       </div>
 
