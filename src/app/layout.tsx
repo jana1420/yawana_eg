@@ -53,7 +53,7 @@ export default async function RootLayout({
             <SiteFooter />
           </div>
           <a
-            href="https://wa.me/201151678074"
+            href="#"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Chat on WhatsApp"
