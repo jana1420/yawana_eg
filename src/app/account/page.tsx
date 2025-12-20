@@ -98,7 +98,17 @@ export default async function AccountPage() {
               <div className="divide-y">
                 {orders.map((order) => {
                   const createdAt = order.created_at
-                    ? new Date(order.created_at as string).toLocaleDateString()
+                    ? new Date(order.created_at as string).toLocaleString(
+                        "en-EG",
+                        {
+                          timeZone: "Africa/Cairo",
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "2-digit",
+                        },
+                      )
                     : "";
 
                   return (

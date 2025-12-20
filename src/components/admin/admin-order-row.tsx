@@ -105,7 +105,14 @@ export function AdminOrderRow({ order }: AdminOrderRowProps) {
   }
 
   const createdAt = order.created_at
-    ? new Date(order.created_at).toLocaleDateString()
+    ? new Date(order.created_at as string).toLocaleString("en-EG", {
+        timeZone: "Africa/Cairo",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      })
     : "";
 
   async function handleSave() {

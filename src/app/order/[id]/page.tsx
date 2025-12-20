@@ -84,7 +84,14 @@ export default async function OrderPage({ params }: PageProps) {
   }
 
   const createdAt = data.created_at
-    ? new Date(data.created_at).toLocaleString()
+    ? new Date(data.created_at).toLocaleString("en-EG", {
+        timeZone: "Africa/Cairo",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      })
     : "";
 
   const shipping = data.shipping_address as {

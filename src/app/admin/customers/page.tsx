@@ -64,7 +64,12 @@ export default async function AdminCustomersPage() {
               </div>
               {customers.map((customer) => {
                 const createdAt = customer.created_at
-                  ? new Date(customer.created_at).toLocaleDateString()
+                  ? new Date(customer.created_at).toLocaleString("en-EG", {
+                      timeZone: "Africa/Cairo",
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })
                   : "";
 
                 const name = customer.full_name ?? "";
