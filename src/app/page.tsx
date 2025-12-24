@@ -175,6 +175,10 @@ export default async function Home({ searchParams }: HomeProps) {
       ? flaggedNewArrivals.slice(0, 6)
       : fallbackSorted.slice(0, 6);
 
+  const featuredProducts = products.filter((product) => product.isFeatured);
+  const productsForFeaturedSection =
+    featuredProducts.length > 0 ? featuredProducts : products;
+
   return (
     <div className="space-y-12 pb-12 pt-10">
       <HeroSection siteSettings={siteSettings} />
@@ -236,7 +240,7 @@ export default async function Home({ searchParams }: HomeProps) {
       )}
 
       <FeaturedProductsSection
-        products={products}
+        products={productsForFeaturedSection}
         categories={categories}
         initialCategorySlug={categorySlug}
       />

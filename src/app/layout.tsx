@@ -31,12 +31,13 @@ export default async function RootLayout({
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase
     .from("site_settings")
-    .select("theme_key")
+    .select("theme_key, contact_instagram_url")
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
 
   const themeKey = (data?.theme_key as string | null) ?? "default";
+  const instagramUrl = (data?.contact_instagram_url as string | null) ?? null;
 
   return (
     <html lang="en" data-theme={themeKey}>
@@ -50,7 +51,7 @@ export default async function RootLayout({
             <main className="flex-1">
               <div className="mx-auto max-w-6xl px-4">{children}</div>
             </main>
-            <SiteFooter />
+            <SiteFooter instagramUrl={instagramUrl} />
           </div>
           <a
             href="#"
