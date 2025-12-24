@@ -39,6 +39,7 @@ type ProductFormProps = {
     categoryId: string | null;
     categoryIds?: string[] | null;
     isFeatured: boolean;
+    isNewArrival?: boolean;
   };
   categories: CategoryOption[];
 };
@@ -146,6 +147,9 @@ export function ProductForm({
   });
   const [isFeatured, setIsFeatured] = useState(
     initialValues?.isFeatured ?? false,
+  );
+  const [isNewArrival, setIsNewArrival] = useState(
+    initialValues?.isNewArrival ?? false,
   );
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [imageUploadError, setImageUploadError] = useState<string | null>(null);
@@ -494,6 +498,7 @@ export function ProductForm({
       categoryId: primaryCategoryId,
       categoryIds,
       isFeatured,
+      isNewArrival,
     };
 
     setIsSubmitting(true);
@@ -1058,6 +1063,18 @@ export function ProductForm({
         />
         <label htmlFor="isFeatured" className="text-xs text-muted-foreground">
           Mark as featured
+        </label>
+      </div>
+      <div className="flex items-center gap-2 pt-1 text-xs">
+        <input
+          id="isNewArrival"
+          type="checkbox"
+          checked={isNewArrival}
+          onChange={(event) => setIsNewArrival(event.target.checked)}
+          className="h-3 w-3 rounded border-input text-primary"
+        />
+        <label htmlFor="isNewArrival" className="text-xs text-muted-foreground">
+          Show in "New Arrivals" section
         </label>
       </div>
 

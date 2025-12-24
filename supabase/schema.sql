@@ -27,6 +27,7 @@ create table public.products (
   stock integer not null default 0,
   category_id uuid references public.categories(id) on delete set null,
   is_featured boolean not null default false,
+  is_new_arrival boolean not null default false,
   created_at timestamptz not null default now()
 );
 
@@ -68,6 +69,7 @@ create table public.order_items (
 
 create index products_category_id_idx on public.products (category_id);
 create index products_is_featured_idx on public.products (is_featured);
+create index products_is_new_arrival_idx on public.products (is_new_arrival);
 create index products_created_at_idx on public.products (created_at);
 
 create table public.product_categories (

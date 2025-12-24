@@ -283,7 +283,6 @@ export function ProductDetails({
       </div>
 
       <div className="space-y-2 border-t pt-4 text-xs text-muted-foreground">
-        <p>Free shipping on orders over EGP 300.</p>
         <p>Easy 30-day returns on all clothing.</p>
       </div>
 

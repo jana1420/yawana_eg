@@ -25,7 +25,7 @@ export default async function AdminEditProductPage({ params }: PageProps) {
       supabase
         .from("products")
         .select(
-          "id, name, slug, sku, description, long_description, price, sale_price, stock, images, sizes, size_stock, colors, color_stock, category_id, is_featured",
+          "id, name, slug, sku, description, long_description, price, sale_price, stock, images, sizes, size_stock, colors, color_stock, category_id, is_featured, is_new_arrival",
         )
         .eq("id", id)
         .maybeSingle(),
@@ -148,6 +148,9 @@ export default async function AdminEditProductPage({ params }: PageProps) {
               categoryId: primaryCategoryId,
               categoryIds: initialCategoryIds,
               isFeatured: product.is_featured ?? false,
+              isNewArrival:
+                ((product as { is_new_arrival?: boolean | null })
+                  .is_new_arrival ?? false) as boolean,
             }}
           />
         </CardContent>

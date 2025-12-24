@@ -10,6 +10,7 @@ export function AboutSection({ siteSettings }: AboutSectionProps) {
   const label = rawLabel || "ABOUT US";
   const title = (siteSettings?.aboutTitle ?? "").trim();
   const body = (siteSettings?.aboutBody ?? "").trim();
+  const hasHtmlInBody = body.includes("<") && body.includes(">");
 
   const images = [
     (siteSettings?.aboutImage1Url ?? "").trim(),
@@ -33,9 +34,16 @@ export function AboutSection({ siteSettings }: AboutSectionProps) {
             </h2>
           )}
           {body && (
-            <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-line">
-              {body}
-            </p>
+            hasHtmlInBody ? (
+              <div
+                className="prose prose-sm max-w-none text-muted-foreground"
+                dangerouslySetInnerHTML={{ __html: body }}
+              />
+            ) : (
+              <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-line">
+                {body}
+              </p>
+            )
           )}
         </div>
         {images.length > 0 && (

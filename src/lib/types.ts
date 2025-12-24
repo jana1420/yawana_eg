@@ -68,6 +68,7 @@ export type Product = {
   categoryId: string | null;
   category?: Category | null;
   isFeatured: boolean;
+  isNewArrival?: boolean;
   isArchived?: boolean;
   createdAt: string;
 };

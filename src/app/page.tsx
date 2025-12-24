@@ -105,7 +105,7 @@ export default async function Home({ searchParams }: HomeProps) {
   let dbQuery = supabase
     .from("products")
     .select(
-      "id, name, slug, description, price, sale_price, images, sizes, size_stock, stock, category_id, is_featured, created_at",
+      "id, name, slug, description, price, sale_price, images, sizes, size_stock, stock, category_id, is_featured, is_new_arrival, created_at",
     )
     .eq("is_archived", false)
     .order("created_at", { ascending: false })
@@ -152,16 +152,28 @@ export default async function Home({ searchParams }: HomeProps) {
       categoryId: (item as { category_id?: string | null }).category_id ?? null,
       category: null,
       isFeatured: item.is_featured ?? false,
+      isNewArrival:
+        ((item as { is_new_arrival?: boolean | null }).is_new_arrival ?? false) as
+          | boolean
+          | undefined,
       isArchived: (item as { is_archived?: boolean | null }).is_archived ?? false,
       createdAt: item.created_at,
     };
   });
 
-  const sortedByDate = [...products].sort((a, b) =>
-    a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0,
-  );
+  const sortByCreatedDesc = (a: Product, b: Product) =>
+    a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0;
 
-  const newArrivals = sortedByDate.slice(0, 6);
+  const flaggedNewArrivals = products
+    .filter((product) => product.isNewArrival)
+    .sort(sortByCreatedDesc);
+
+  const fallbackSorted = [...products].sort(sortByCreatedDesc);
+
+  const newArrivals =
+    flaggedNewArrivals.length > 0
+      ? flaggedNewArrivals.slice(0, 6)
+      : fallbackSorted.slice(0, 6);
 
   return (
     <div className="space-y-12 pb-12 pt-10">

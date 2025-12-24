@@ -40,6 +40,7 @@ const productSchema = z.object({
   categoryId: z.string().uuid().nullable().or(z.literal("")),
   categoryIds: z.array(z.string().uuid()).optional().default([]),
   isFeatured: z.boolean(),
+  isNewArrival: z.boolean().optional().default(false),
 });
 
 export async function PATCH(
@@ -104,6 +105,7 @@ export async function PATCH(
       color_stock: value.colorStock ?? [],
       category_id: primaryCategoryId,
       is_featured: value.isFeatured,
+      is_new_arrival: value.isNewArrival ?? false,
     })
     .eq("id", effectiveId);
 

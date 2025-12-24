@@ -52,9 +52,6 @@ export function FeaturedProductsSection({
       <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="text-sm font-medium tracking-tight">Featured pieces</h2>
-          <p className="text-xs text-muted-foreground">
-            Easy outfits built from breathable tees, shirts, and trousers.
-          </p>
         </div>
       </div>
       <div className="flex flex-wrap gap-2 pt-1">
