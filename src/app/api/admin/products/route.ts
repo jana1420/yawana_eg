@@ -94,9 +94,12 @@ export async function POST(request: Request) {
     .single();
 
   if (error || !data) {
-    return NextResponse.json({ error: "Could not create product" }, {
-      status: 500,
-    });
+    return NextResponse.json(
+      { error: error?.message ?? "Could not create product" },
+      {
+        status: 500,
+      },
+    );
   }
 
   if (categoryIds.length > 0) {

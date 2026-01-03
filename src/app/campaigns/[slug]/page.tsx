@@ -146,7 +146,7 @@ export default async function CampaignPage({ params }: PageProps) {
               </p>
             )}
             <p className="text-[11px] text-zinc-300/80">
-              Curated and styled by <span className="font-semibold">RimalTold</span>.
+              Curated and styled by <span className="font-semibold">AH Adele</span>.
             </p>
           </div>
           <div className="relative h-48 overflow-hidden rounded-2xl border border-zinc-700/60 bg-zinc-800/80 sm:h-56">
@@ -224,7 +224,7 @@ export default async function CampaignPage({ params }: PageProps) {
 
                   <div className="space-y-1.5">
                     <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                      Styled by RimalTold
+                      Styled by AH Adele
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {outfitNote ??

@@ -23,7 +23,7 @@ export default async function Home({ searchParams }: HomeProps) {
 
   const supabase = await createSupabaseServerClient();
 
-  const { data: settingsRow } = await supabase
+  const { data: settingsRow, error: settingsError } = await supabase
     .from("site_settings")
     .select(
       "id, hero_title, hero_subtitle, hero_image_url, hero_primary_label, hero_primary_href, hero_secondary_label, hero_secondary_href, hero_banner_text, about_enabled, about_label, about_title, about_body, about_image1_url, about_image2_url, contact_email, contact_phone, contact_address_line1, contact_address_line2, contact_city, contact_country, hero_additional_image_urls, created_at",
@@ -31,6 +31,12 @@ export default async function Home({ searchParams }: HomeProps) {
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
+
+  console.log("site_settings raw result", { settingsRow, settingsError });
+
+  if (settingsError) {
+    console.error("Error fetching site_settings", settingsError);
+  }
 
   const siteSettings: SiteSettings | null = settingsRow
     ? {
@@ -254,7 +260,7 @@ export default async function Home({ searchParams }: HomeProps) {
               Stay in the loop
             </p>
             <h2 className="text-lg font-semibold tracking-tight sm:text-xl">
-              Join the RimalTold list
+              Join the AH Adele list
             </h2>
             <p className="text-xs text-muted-foreground">
               Be the first to discover new pieces, restocks, and limited edits.
@@ -275,7 +281,7 @@ export default async function Home({ searchParams }: HomeProps) {
               </Button>
             </div>
             <p className="text-[11px] text-muted-foreground">
-              No spam. Only thoughtful updates from RimalTold.
+              No spam. Only thoughtful updates from AH Adele.
             </p>
           </div>
         </div>

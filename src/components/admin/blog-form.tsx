@@ -198,7 +198,7 @@ export function BlogForm({ mode, blogId, initialValues }: BlogFormProps) {
           onChange={handleSlugChange}
           required
           className="h-9 text-sm font-mono"
-          placeholder="told-by-rimal-story"
+          placeholder="ah-adele-story"
         />
         <p className="text-[11px] text-muted-foreground">
           Shown in the link: /blog/your-slug

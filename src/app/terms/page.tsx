@@ -19,7 +19,7 @@ export default async function TermsPage() {
           Terms &amp; conditions
         </h1>
         <p className="text-sm text-muted-foreground">
-          The rules for using the RimalTold store and placing orders.
+          The rules for using the AH Adele store and placing orders.
         </p>
       </div>
 

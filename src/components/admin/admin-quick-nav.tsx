@@ -153,13 +153,6 @@ export function AdminQuickNav() {
         <span>{labels.campaigns}</span>
       </a>
       <a
-        href="/admin/blogs"
-        className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-3 text-xs font-medium text-muted-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
-      >
-        <FileText className="h-3.5 w-3.5" aria-hidden="true" />
-        <span>{labels.blogPosts}</span>
-      </a>
-      <a
         href="/admin/admins"
         className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-3 text-xs font-medium text-muted-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
       >

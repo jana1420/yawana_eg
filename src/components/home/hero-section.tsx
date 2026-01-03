@@ -106,6 +106,10 @@ export function HeroSection({ siteSettings }: HeroSectionProps) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    console.log("HeroSection images", images, siteSettings);
+  }, [images, siteSettings]);
+
+  useEffect(() => {
     if (images.length <= 1) return;
 
     setIndex(0);

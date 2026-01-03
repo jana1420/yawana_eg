@@ -59,7 +59,7 @@ export default async function AdminAdminsPage() {
           Admin team
         </h1>
         <p className="text-sm text-muted-foreground">
-          Manage the admins who can access the RimalTold dashboard.
+          Manage the admins who can access the AH Adele dashboard.
         </p>
       </div>
 
