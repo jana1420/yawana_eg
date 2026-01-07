@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { slugify } from "@/lib/slug";
 
 type CategoryOption = {
   id: string;
@@ -60,6 +61,7 @@ export function ProductForm({
 
   const [name, setName] = useState(initialValues?.name ?? "");
   const [slug, setSlug] = useState(initialValues?.slug ?? "");
+  const [slugTouched, setSlugTouched] = useState(Boolean(initialValues?.slug));
   const [sku, setSku] = useState(initialValues?.sku ?? "");
   const [description, setDescription] = useState(
     initialValues?.description ?? "",
@@ -153,6 +155,19 @@ export function ProductForm({
   );
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [imageUploadError, setImageUploadError] = useState<string | null>(null);
+
+  function handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const nextName = event.target.value;
+    setName(nextName);
+    if (!slugTouched) {
+      setSlug(slugify(nextName));
+    }
+  }
+
+  function handleSlugChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setSlugTouched(true);
+    setSlug(slugify(event.target.value));
+  }
 
   function parseImageList(value: string) {
     return value
@@ -344,6 +359,19 @@ export function ProductForm({
     event.preventDefault();
     if (isSubmitting) return;
 
+    const trimmedName = name.trim();
+    const finalSlug = slugify(slug || name);
+
+    if (!trimmedName) {
+      setError("Name is required.");
+      return;
+    }
+
+    if (!finalSlug) {
+      setError("Slug is required.");
+      return;
+    }
+
     const priceNumber = Number.parseFloat(price.replace(",", "."));
     let stockNumber = Number.parseInt(stock, 10);
 
@@ -482,8 +510,8 @@ export function ProductForm({
 
     const payload = {
       id: mode === "edit" ? effectiveProductId : undefined,
-      name,
-      slug,
+      name: trimmedName,
+      slug: finalSlug,
       sku: sku.trim() || null,
       description: description || null,
       longDescription: longDescription || null,
@@ -651,7 +679,7 @@ export function ProductForm({
         </label>
         <Input
           value={name}
-          onChange={(event) => setName(event.target.value)}
+          onChange={handleNameChange}
           required
           className="h-9 text-sm"
         />
@@ -663,7 +691,7 @@ export function ProductForm({
         </label>
         <Input
           value={slug}
-          onChange={(event) => setSlug(event.target.value)}
+          onChange={handleSlugChange}
           required
           className="h-9 text-sm"
         />

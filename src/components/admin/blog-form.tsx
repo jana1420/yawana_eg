@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { slugify } from "@/lib/slug";
 
 const MAX_IMAGE_SIZE_BYTES = 500 * 1024;
 
@@ -22,15 +23,6 @@ type BlogFormProps = {
     isPublished: boolean;
   };
 };
-
-function slugify(value: string) {
-  return value
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
 
 export function BlogForm({ mode, blogId, initialValues }: BlogFormProps) {
   const router = useRouter();
@@ -63,7 +55,7 @@ export function BlogForm({ mode, blogId, initialValues }: BlogFormProps) {
 
   function handleSlugChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSlugTouched(true);
-    setSlug(event.target.value);
+    setSlug(slugify(event.target.value));
     setError(null);
   }
 

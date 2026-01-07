@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { slugify } from "@/lib/slug";
 
 const MAX_IMAGE_SIZE_BYTES = 500 * 1024;
 
@@ -21,15 +22,6 @@ type Campaign = {
 type CampaignAdminPanelProps = {
   initialCampaigns: Campaign[];
 };
-
-function slugify(value: string) {
-  return value
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
 
 export function CampaignAdminPanel({ initialCampaigns }: CampaignAdminPanelProps) {
   const [campaigns, setCampaigns] = useState<Campaign[]>(initialCampaigns);
@@ -61,7 +53,7 @@ export function CampaignAdminPanel({ initialCampaigns }: CampaignAdminPanelProps
 
   function handleSlugChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSlugTouched(true);
-    setSlug(event.target.value);
+    setSlug(slugify(event.target.value));
     setSuccess(null);
   }
 

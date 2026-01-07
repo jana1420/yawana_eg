@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { slugify } from "@/lib/slug";
 
 type CategoryFormProps = {
   mode: "create" | "edit";
@@ -23,6 +24,7 @@ export function CategoryForm({ mode, categoryId, initialValues }: CategoryFormPr
 
   const [name, setName] = useState(initialValues?.name ?? "");
   const [slug, setSlug] = useState(initialValues?.slug ?? "");
+  const [slugTouched, setSlugTouched] = useState(Boolean(initialValues?.slug));
   const [isFeatured, setIsFeatured] = useState(initialValues?.isFeatured ?? false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -30,13 +32,39 @@ export function CategoryForm({ mode, categoryId, initialValues }: CategoryFormPr
   const [imageUrl, setImageUrl] = useState(initialValues?.imageUrl ?? "");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
 
+  function handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const nextName = event.target.value;
+    setName(nextName);
+    if (!slugTouched) {
+      setSlug(slugify(nextName));
+    }
+  }
+
+  function handleSlugChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setSlugTouched(true);
+    setSlug(slugify(event.target.value));
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (isSubmitting) return;
 
+    const trimmedName = name.trim();
+    const trimmedSlug = slugify(slug || name);
+
+    if (!trimmedName) {
+      setError("Name is required.");
+      return;
+    }
+
+    if (!trimmedSlug) {
+      setError("Slug is required.");
+      return;
+    }
+
     const payload = {
-      name,
-      slug,
+      name: trimmedName,
+      slug: trimmedSlug,
       isFeatured,
       imageUrl: imageUrl.trim() || undefined,
     };
@@ -151,7 +179,7 @@ export function CategoryForm({ mode, categoryId, initialValues }: CategoryFormPr
         </label>
         <Input
           value={name}
-          onChange={(event) => setName(event.target.value)}
+          onChange={handleNameChange}
           required
           className="h-9 text-sm"
         />
@@ -212,7 +240,7 @@ export function CategoryForm({ mode, categoryId, initialValues }: CategoryFormPr
         </label>
         <Input
           value={slug}
-          onChange={(event) => setSlug(event.target.value)}
+          onChange={handleSlugChange}
           required
           className="h-9 text-sm"
         />
