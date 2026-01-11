@@ -21,6 +21,7 @@ const checkoutSchema = z.object({
     state: z.string().optional(),
     country: z.string().min(1),
   }),
+  shippingCityId: z.string().uuid().optional(),
   couponCode: z.string().optional(),
   items: z
     .array(
@@ -46,7 +47,8 @@ export async function POST(request: Request) {
     );
   }
 
-  const { email, shippingAddress, items, couponCode } = parsed.data;
+  const { email, shippingAddress, items, couponCode, shippingCityId } =
+    parsed.data;
 
   const supabase = await createSupabaseServerClient();
 
@@ -165,18 +167,44 @@ export async function POST(request: Request) {
     if (discountCents > total) discountCents = total;
   }
 
-  // Load flat shipping fee from site settings (default 0 if not configured)
-  const { data: settingsRow } = await supabase
-    .from("site_settings")
-    .select("shipping_flat_fee_cents")
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  let shippingFeeCents = 0;
 
-  const shippingFlatFeeCents =
-    (settingsRow?.shipping_flat_fee_cents as number | null) ?? 0;
+  if (shippingCityId) {
+    const { data: shippingCity, error: shippingCityError } = await supabase
+      .from("shipping_cities")
+      .select("id, name, fee_cents, active")
+      .eq("id", shippingCityId)
+      .maybeSingle();
 
-  const orderTotal = total - discountCents + shippingFlatFeeCents;
+    if (shippingCityError) {
+      return NextResponse.json(
+        { error: "Could not load shipping city." },
+        { status: 500 },
+      );
+    }
+
+    if (!shippingCity || !(shippingCity.active as boolean)) {
+      return NextResponse.json(
+        { error: "Selected shipping city is not available." },
+        { status: 400 },
+      );
+    }
+
+    shippingFeeCents = (shippingCity.fee_cents as number | null) ?? 0;
+  } else {
+    // Fallback to flat shipping fee from site settings (default 0 if not configured)
+    const { data: settingsRow } = await supabase
+      .from("site_settings")
+      .select("shipping_flat_fee_cents")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    shippingFeeCents =
+      (settingsRow?.shipping_flat_fee_cents as number | null) ?? 0;
+  }
+
+  const orderTotal = total - discountCents + shippingFeeCents;
 
   const { data: order, error: orderError } = await supabase
     .from("orders")
@@ -251,7 +279,7 @@ export async function POST(request: Request) {
     }));
 
     const emailItemsWithShipping =
-      shippingFlatFeeCents > 0
+      shippingFeeCents > 0
         ? [
             ...emailItems,
             {
@@ -259,8 +287,8 @@ export async function POST(request: Request) {
               size: null,
               color: null,
               quantity: 1,
-              unitPrice: shippingFlatFeeCents,
-              subtotal: shippingFlatFeeCents,
+              unitPrice: shippingFeeCents,
+              subtotal: shippingFeeCents,
             },
           ]
         : emailItems;

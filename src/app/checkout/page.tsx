@@ -17,37 +17,11 @@ function formatPrice(cents: number) {
     maximumFractionDigits: 0,
   }).format(cents / 100);
 }
-
-const EGYPT_CITIES = [
-  "Cairo",
-  "Giza",
-  "Alexandria",
-  "6th of October",
-  "Al Sharqia",
-  "Aswan",
-  "Asyut",
-  "Beheira",
-  "Beni Suef",
-  "Dakahlia",
-  "Damietta",
-  "Faiyum",
-  "Gharbia",
-  "Helwan",
-  "Ismailia",
-  "Kafr El Sheikh",
-  "Luxor",
-  "Minya",
-  "Monufia",
-  "New Cairo",
-  "Port Said",
-  "Qalyubia",
-  "Qena",
-  "Red Sea",
-  "Sharqia",
-  "Sohag",
-  "South Sinai",
-  "Suez",
-];
+type ShippingCity = {
+  id: string;
+  name: string;
+  feeCents: number;
+};
 
 export default function CheckoutPage() {
   const { cart, clear } = useCart();
@@ -57,6 +31,9 @@ export default function CheckoutPage() {
   const [error, setError] = useState<string | null>(null);
 
   const [shippingFeeCents, setShippingFeeCents] = useState<number | null>(null);
+  const [shippingCities, setShippingCities] = useState<ShippingCity[]>([]);
+  const [selectedShippingCityId, setSelectedShippingCityId] =
+    useState<string | null>(null);
 
   const [couponInput, setCouponInput] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState<
@@ -80,10 +57,34 @@ export default function CheckoutPage() {
   useEffect(() => {
     let cancelled = false;
 
-    async function loadSettings() {
+    async function loadShipping() {
+      try {
+        const res = await fetch("/api/shipping/cities");
+        if (res.ok) {
+          const data = (await res.json()) as {
+            cities?: { id: string; name: string; feeCents: number }[];
+          };
+          const cities = data.cities ?? [];
+          if (!cancelled && cities.length > 0) {
+            setShippingCities(cities);
+            const first = cities[0];
+            setSelectedShippingCityId(first?.id ?? null);
+            setShippingFeeCents(
+              typeof first?.feeCents === "number" ? first.feeCents : 0,
+            );
+            return;
+          }
+        }
+      } catch {
+        // Ignore and fall back to flat settings below
+      }
+
       try {
         const res = await fetch("/api/site-settings/public");
-        if (!res.ok) return;
+        if (!res.ok) {
+          if (!cancelled) setShippingFeeCents(0);
+          return;
+        }
         const data = (await res.json()) as {
           shippingFlatFeeCents?: number | null;
         };
@@ -99,13 +100,14 @@ export default function CheckoutPage() {
       }
     }
 
-    loadSettings();
+    loadShipping();
 
     return () => {
       cancelled = true;
     };
   }, []);
 
+  const hasDynamicShippingCities = shippingCities.length > 0;
   const shipping = shippingFeeCents ?? 0;
   const discount = appliedCoupon?.discountCents ?? 0;
   const total = Math.max(0, subtotal + shipping - discount);
@@ -177,6 +179,9 @@ export default function CheckoutPage() {
     const couponCodeValue =
       (appliedCoupon?.code ?? couponInput.trim()) || undefined;
 
+    const selectedCity =
+      shippingCities.find((city) => city.id === selectedShippingCityId) ?? null;
+
     const payload = {
       email: String(formData.get("email") ?? ""),
       shippingAddress: {
@@ -184,7 +189,8 @@ export default function CheckoutPage() {
         phone: String(formData.get("phone") ?? ""),
         addressLine1: String(formData.get("addressLine1") ?? ""),
         addressLine2: String(formData.get("addressLine2") ?? ""),
-        city: String(formData.get("city") ?? ""),
+        city:
+          selectedCity?.name ?? String(formData.get("city") ?? ""),
         state: String(formData.get("state") ?? ""),
         country: String(formData.get("country") ?? ""),
       },
@@ -195,6 +201,7 @@ export default function CheckoutPage() {
         color: item.color ?? null,
       })),
       couponCode: couponCodeValue,
+      shippingCityId: selectedCity?.id,
     };
 
     setIsSubmitting(true);
@@ -313,18 +320,33 @@ export default function CheckoutPage() {
               <label className="block text-xs font-medium text-muted-foreground">
                 City
               </label>
-              <select
-                name="city"
-                required
-                className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                defaultValue="Cairo"
-              >
-                {EGYPT_CITIES.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
+              {hasDynamicShippingCities ? (
+                <select
+                  name="shippingCityId"
+                  required
+                  className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  defaultValue={shippingCities[0]?.id ?? ""}
+                  onChange={(event) => {
+                    const id = event.target.value;
+                    setSelectedShippingCityId(id);
+                    const city = shippingCities.find((c) => c.id === id) ?? null;
+                    setShippingFeeCents(city ? city.feeCents : 0);
+                  }}
+                >
+                  {shippingCities.map((city) => (
+                    <option key={city.id} value={city.id}>
+                      {city.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <Input
+                  name="city"
+                  required
+                  placeholder="City"
+                  className="h-9 text-sm"
+                />
+              )}
             </div>
             <div className="space-y-2">
               <label className="block text-xs font-medium text-muted-foreground">

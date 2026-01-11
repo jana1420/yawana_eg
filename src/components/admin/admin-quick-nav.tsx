@@ -16,6 +16,7 @@ import {
   TicketPercent,
   Users,
   FileText,
+  Truck,
 } from "lucide-react";
 
 export function AdminQuickNav() {
@@ -68,6 +69,7 @@ export function AdminQuickNav() {
     viewOrders: isArabic ? "عرض الطلبات" : "View orders",
     coupons: isArabic ? "قسائم الخصم" : "Coupons",
     campaigns: isArabic ? "حملات العلامات" : "Brand campaigns",
+    shipping: isArabic ? "الشحن" : "Shipping",
     admins: isArabic ? "مديرو النظام" : "Admins",
     scanStock: isArabic ? "مسح الباركود" : "Scan stock",
     blogPosts: isArabic ? "المدونة" : "Blog posts",
@@ -144,6 +146,13 @@ export function AdminQuickNav() {
       >
         <TicketPercent className="h-3.5 w-3.5" aria-hidden="true" />
         <span>{labels.coupons}</span>
+      </a>
+      <a
+        href="/admin/shipping"
+        className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-3 text-xs font-medium text-muted-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+      >
+        <Truck className="h-3.5 w-3.5" aria-hidden="true" />
+        <span>{labels.shipping}</span>
       </a>
       <a
         href="/admin/campaigns"
