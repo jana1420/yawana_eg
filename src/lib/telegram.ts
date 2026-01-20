@@ -15,6 +15,7 @@ export type TelegramShippingAddress = {
   city: string;
   state?: string | null;
   country: string;
+  height?: string | null;
 };
 
 export type SendNewOrderTelegramNotificationOptions = {
@@ -75,7 +76,14 @@ export async function sendNewOrderTelegramNotification(
     addressBlock = `\nShipping address:\n${addressLines.join("\n")}`;
   }
 
-  const text = `New order received\n\nOrder ID: ${options.orderId}\nCustomer: ${customerLabel}\n${phoneLine}Total: ${totalFormatted} EGP\n\nItems:\n${lines}${addressBlock}\n\nPayment method: Cash on delivery.`;
+  const heightLine =
+    options.shippingAddress &&
+    typeof options.shippingAddress.height === "string" &&
+    options.shippingAddress.height.trim().length > 0
+      ? `Height: ${options.shippingAddress.height.trim()}\n`
+      : "";
+
+  const text = `New order received\n\nOrder ID: ${options.orderId}\nCustomer: ${customerLabel}\n${phoneLine}${heightLine}Total: ${totalFormatted} EGP\n\nItems:\n${lines}${addressBlock}\n\nPayment method: Cash on delivery.`;
 
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 

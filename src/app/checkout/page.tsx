@@ -46,6 +46,7 @@ export default function CheckoutPage() {
   >(null);
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
   const [couponError, setCouponError] = useState<string | null>(null);
+  const [height, setHeight] = useState<string>("");
 
   const subtotal = cart.items.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -105,6 +106,17 @@ export default function CheckoutPage() {
     return () => {
       cancelled = true;
     };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const stored = window.localStorage.getItem("customer-height");
+      if (stored) {
+        setHeight(stored);
+      }
+    } catch {
+    }
   }, []);
 
   const hasDynamicShippingCities = shippingCities.length > 0;
@@ -193,6 +205,7 @@ export default function CheckoutPage() {
           selectedCity?.name ?? String(formData.get("city") ?? ""),
         state: String(formData.get("state") ?? ""),
         country: String(formData.get("country") ?? ""),
+        height: String(formData.get("height") ?? ""),
       },
       items: cart.items.map((item) => ({
         productId: item.productId,
@@ -224,6 +237,15 @@ export default function CheckoutPage() {
         return;
       }
 
+      if (typeof window !== "undefined") {
+        try {
+          const trimmed = height.trim();
+          if (trimmed) {
+            window.localStorage.setItem("customer-height", trimmed);
+          }
+        } catch {
+        }
+      }
       clear();
       router.push(`/order/${data.orderId}`);
     } catch {
@@ -264,6 +286,20 @@ export default function CheckoutPage() {
               required
               placeholder="you@example.com"
               className="h-9 text-sm"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-xs font-medium text-muted-foreground">
+              Height (optional)
+            </label>
+            <Input
+              name="height"
+              type="text"
+              placeholder="e.g. 170 cm"
+              className="h-9 text-sm max-w-[220px]"
+              value={height}
+              onChange={(event) => setHeight(event.target.value)}
             />
           </div>
 

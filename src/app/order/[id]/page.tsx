@@ -102,6 +102,7 @@ export default async function OrderPage({ params }: PageProps) {
     city?: string;
     state?: string;
     country?: string;
+    height?: string;
   };
 
   const items = (data.order_items ?? []).map((item) => {
@@ -179,6 +180,9 @@ export default async function OrderPage({ params }: PageProps) {
             <p className="text-xs text-muted-foreground">Contact</p>
             <p>{data.email}</p>
             {shipping.phone && <p>{shipping.phone}</p>}
+            {shipping.height && shipping.height.trim().length > 0 && (
+              <p>Height: {shipping.height}</p>
+            )}
           </div>
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground">Payment method</p>

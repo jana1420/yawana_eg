@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import type { Product } from "@/lib/types";
 import { ProductReviews } from "@/components/product-reviews";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { useCart } from "@/components/cart/cart-provider";
 import { CheckCircle2, ShoppingBag } from "lucide-react";
 
@@ -60,6 +61,18 @@ export function ProductDetails({
       : internalSelectedColor;
   const [sizeError, setSizeError] = useState<string | null>(null);
   const [justAdded, setJustAdded] = useState(false);
+  const [height, setHeight] = useState<string>("");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const stored = window.localStorage.getItem("customer-height");
+      if (stored) {
+        setHeight(stored);
+      }
+    } catch {
+    }
+  }, []);
 
   const sizeStockMap = new Map<string, number>();
   if (Array.isArray(product.sizeStock)) {
@@ -93,6 +106,15 @@ export function ProductDetails({
     if (maxQuantity <= 0) return;
 
     addToCart(product, 1, selectedSize ?? null, selectedColor ?? null, maxQuantity);
+    if (typeof window !== "undefined") {
+      try {
+        const trimmed = height.trim();
+        if (trimmed) {
+          window.localStorage.setItem("customer-height", trimmed);
+        }
+      } catch {
+      }
+    }
     setJustAdded(true);
     window.setTimeout(() => {
       setJustAdded(false);
@@ -199,6 +221,26 @@ export function ProductDetails({
           </div>
         </div>
       )}
+
+      <div className="space-y-2">
+        <p className="text-xs font-medium text-muted-foreground">
+          Your height (optional)
+        </p>
+        <Input
+          name="height"
+          type="text"
+          placeholder="e.g. 170 cm"
+          className="h-9 text-sm max-w-[220px]"
+          value={height}
+          onChange={(event) => {
+            const value = event.target.value;
+            setHeight(value);
+          }}
+        />
+        <p className="text-[11px] text-muted-foreground">
+          This helps us ensure a better fit for your order.
+        </p>
+      </div>
 
       {hasSizes && (
         <div className="space-y-2">

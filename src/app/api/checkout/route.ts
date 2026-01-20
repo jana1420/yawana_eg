@@ -20,6 +20,7 @@ const checkoutSchema = z.object({
     city: z.string().min(1),
     state: z.string().optional(),
     country: z.string().min(1),
+    height: z.string().optional(),
   }),
   shippingCityId: z.string().uuid().optional(),
   couponCode: z.string().optional(),
@@ -314,6 +315,10 @@ export async function POST(request: Request) {
         customerEmail: email,
         customerName: shippingAddress.fullName,
         customerPhone: shippingAddress.phone,
+        customerHeight:
+          typeof (shippingAddress as { height?: unknown }).height === "string"
+            ? ((shippingAddress as { height?: string }).height ?? null)
+            : null,
       });
     }
 
@@ -332,6 +337,10 @@ export async function POST(request: Request) {
         city: shippingAddress.city,
         state: shippingAddress.state ?? null,
         country: shippingAddress.country,
+        height:
+          typeof (shippingAddress as { height?: unknown }).height === "string"
+            ? ((shippingAddress as { height?: string }).height ?? null)
+            : null,
       },
     });
   } catch {

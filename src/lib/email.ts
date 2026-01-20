@@ -151,6 +151,7 @@ type SendNewOrderNotificationOptions = {
   customerEmail: string;
   customerName?: string | null;
   customerPhone?: string | null;
+  customerHeight?: string | null;
 };
 
 export async function sendNewOrderNotificationEmail(
@@ -193,7 +194,12 @@ export async function sendNewOrderNotificationEmail(
     ? `Phone: ${options.customerPhone}\n`
     : "";
 
-  const text = `New order received\n\nOrder ID: ${options.orderId}\nCustomer: ${customerLabel}\n${phoneLine}Total: ${totalFormatted} EGP\n\nItems:\n${lines}\n\nPayment method: Cash on delivery.`;
+  const heightLine =
+    options.customerHeight && options.customerHeight.trim().length > 0
+      ? `Height: ${options.customerHeight.trim()}\n`
+      : "";
+
+  const text = `New order received\n\nOrder ID: ${options.orderId}\nCustomer: ${customerLabel}\n${phoneLine}${heightLine}Total: ${totalFormatted} EGP\n\nItems:\n${lines}\n\nPayment method: Cash on delivery.`;
 
   await resend.emails.send({
     from,
