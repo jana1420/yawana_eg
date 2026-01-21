@@ -119,7 +119,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     <div className="mx-auto max-w-3xl space-y-6 pb-12 pt-10 px-4">
       <header className="space-y-3">
         <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-          Told By AH Adele
+          Told By MARIOS
         </p>
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
           {post.title}

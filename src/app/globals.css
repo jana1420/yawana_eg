@@ -74,6 +74,41 @@
   --sidebar-ring: oklch(0.439 0 0);
 }
 
+:root[data-theme="marios"] {
+  --background: #e5e7eb;
+  --foreground: #071423;
+  --card: #ffffff;
+  --card-foreground: #071423;
+  --popover: #ffffff;
+  --popover-foreground: #071423;
+  --primary: #11253b;
+  --primary-foreground: #f9fafb;
+  --secondary: #1c3358;
+  --secondary-foreground: #f9fafb;
+  --muted: #d4d4d8;
+  --muted-foreground: #4b5563;
+  --accent: #1c3358;
+  --accent-foreground: #f9fafb;
+  --destructive: #b91c1c;
+  --destructive-foreground: #fef2f2;
+  --border: #d4d4d8;
+  --input: #d4d4d8;
+  --ring: #11253b;
+  --chart-1: #11253b;
+  --chart-2: #1c3358;
+  --chart-3: #64748b;
+  --chart-4: #0f172a;
+  --chart-5: #94a3b8;
+  --sidebar: #e5e7eb;
+  --sidebar-foreground: #071423;
+  --sidebar-primary: #11253b;
+  --sidebar-primary-foreground: #f9fafb;
+  --sidebar-accent: #1c3358;
+  --sidebar-accent-foreground: #f9fafb;
+  --sidebar-border: #d4d4d8;
+  --sidebar-ring: #11253b;
+}
+
 :root[data-theme="palette-1"] {
   /* Soft grey, ultra minimal light theme */
   --background: #f5f5f6;

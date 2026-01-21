@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Menu, ShoppingBag, User, X } from "lucide-react";
 
 import { useCart } from "@/components/cart/cart-provider";
-import RimalToldLogo from "../../../ah logo.png";
+import MariosLogo from "../../../logo (3).png";
 
 export function SiteHeader() {
   const { cart } = useCart();
@@ -120,7 +120,7 @@ export function SiteHeader() {
   const isArabic = language === "ar";
 
   const labels = {
-    newArrivals: isArabic ? "وصل حديثاً" : "Told By AH Adele",
+    newArrivals: isArabic ? "وصل حديثاً" : "Told By MARIOS",
     allProducts: isArabic ? "كل المنتجات" : "All products",
     bestSellers: isArabic ? "تسوق حسب الفئة" : "Shop by category",
     contact: isArabic ? "اتصل بنا" : "Contact",
@@ -153,8 +153,8 @@ export function SiteHeader() {
             className="flex items-center justify-center gap-2 md:justify-self-center"
           >
             <Image
-              src={RimalToldLogo}
-              alt="AH Adele"
+              src={MariosLogo}
+              alt="MARIOS"
               className="h-10 w-auto sm:h-14 md:h-16"
               priority
             />

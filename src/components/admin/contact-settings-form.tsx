@@ -52,7 +52,7 @@ export function ContactSettingsForm({ initialValues }: ContactSettingsFormProps)
   const [contactTiktokUrl, setContactTiktokUrl] = useState(
     initialValues?.contactTiktokUrl ?? "",
   );
-  const [themeKey, setThemeKey] = useState(initialValues?.themeKey ?? "default");
+  const [themeKey, setThemeKey] = useState(initialValues?.themeKey ?? "marios");
 
   const [shippingFlatFee, setShippingFlatFee] = useState(
     initialValues?.shippingFlatFeeCents != null
@@ -329,6 +329,7 @@ export function ContactSettingsForm({ initialValues }: ContactSettingsFormProps)
         </label>
         <div className="grid gap-3 sm:grid-cols-3 md:grid-cols-5">
           {[
+            { key: "marios", label: "MARIOS Navy", color: "#11253b" },
             { key: "default", label: "Default", color: "#111827" },
             { key: "palette-1", label: "Soft Grey", color: "#e1e1e6" },
             { key: "palette-2", label: "Forest Green", color: "#16a34a" },

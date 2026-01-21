@@ -11,7 +11,7 @@ export function SiteFooter({
     <footer className="border-t bg-background">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
         <div className="space-y-1">
-          <p>&copy; {year} AH Adele. All rights reserved.</p>
+          <p>&copy; {year} MARIOS. All rights reserved.</p>
           <p className="text-[11px]">
             Powered and created by{" "}
             <a

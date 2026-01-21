@@ -24,7 +24,7 @@ export default async function AdminCategoriesPage() {
             Categories
           </h1>
           <p className="text-sm text-muted-foreground">
-            Manage the product categories for AH Adele.
+            Manage the product categories for MARIOS.
           </p>
         </div>
         <a

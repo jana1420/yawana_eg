@@ -85,7 +85,7 @@ export async function sendOrderConfirmationEmail(
     <div style="width:100%;padding:24px 12px;">
       <div style="max-width:600px;margin:0 auto;background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(15,23,42,0.08);">
         <div style="padding:20px 24px 16px;border-bottom:1px solid #e4e4e7;">
-          <div style="font-size:18px;font-weight:600;letter-spacing:-0.02em;">AH Adele</div>
+          <div style="font-size:18px;font-weight:600;letter-spacing:-0.02em;">MARIOS</div>
           <p style="margin:8px 0 0;font-size:14px;color:#71717a;">
             Hi there, your order <span style="font-weight:600;">#${options.orderId}</span> is confirmed.
           </p>
@@ -129,7 +129,7 @@ export async function sendOrderConfirmationEmail(
           <p style="margin-top:14px;font-size:12px;color:#a1a1aa;">If you have any questions, just reply to this email and we’ll be happy to help.</p>
         </div>
       </div>
-      <p style="margin-top:12px;font-size:12px;color:#a1a1aa;text-align:center;">© ${new Date().getFullYear()} AH Adele. All rights reserved.</p>
+      <p style="margin-top:12px;font-size:12px;color:#a1a1aa;text-align:center;">© ${new Date().getFullYear()} MARIOS. All rights reserved.</p>
     </div>
   </body>
 </html>`;

@@ -19,7 +19,7 @@ export default async function ShippingReturnsPage() {
           Shipping &amp; returns
         </h1>
         <p className="text-sm text-muted-foreground">
-          Learn how delivery and returns work for AH Adele orders.
+          Learn how delivery and returns work for MARIOS orders.
         </p>
       </div>
 

@@ -19,7 +19,7 @@ export async function AnnouncementBar() {
   const repeated = Array.from({ length: 6 }, () => text).join("  •  ");
 
   return (
-    <div className="border-b border-border/60 bg-secondary/90 text-foreground/80 backdrop-blur">
+    <div className="border-b border-border/60 bg-secondary/90 text-white backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center overflow-hidden px-4 py-2 text-[11px] font-medium tracking-wide sm:text-xs">
         <div className="flex animate-hero-marquee whitespace-nowrap">
           <span>{repeated}</span>

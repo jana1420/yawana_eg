@@ -66,7 +66,7 @@ export default function LoginPage() {
           <div className="space-y-2">
             <h1 className="text-lg font-semibold tracking-tight">Sign in</h1>
             <p className="text-xs text-muted-foreground">
-              Use your email and password to access your AH Adele account.
+              Use your email and password to access your MARIOS account.
             </p>
           </div>
           <form className="space-y-4" onSubmit={handleSubmit}>
