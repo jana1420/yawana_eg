@@ -24,6 +24,7 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   images: {
     remotePatterns,
+    unoptimized: true, // ✅ IMPORTANT
   },
 };
 
