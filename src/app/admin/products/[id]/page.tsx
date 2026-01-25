@@ -25,7 +25,7 @@ export default async function AdminEditProductPage({ params }: PageProps) {
       supabase
         .from("products")
         .select(
-          "id, name, slug, sku, description, long_description, price, sale_price, stock, images, sizes, size_stock, colors, color_stock, category_id, is_featured, is_new_arrival",
+          "id, name, slug, sku, description, long_description, size_chart, price, sale_price, stock, images, sizes, size_stock, colors, color_stock, category_id, is_featured, is_new_arrival",
         )
         .eq("id", id)
         .maybeSingle(),
@@ -136,6 +136,13 @@ export default async function AdminEditProductPage({ params }: PageProps) {
               slug: product.slug,
               sku: (product as { sku?: string | null }).sku ?? null,
               description: product.description ?? null,
+              longDescription:
+                ((product as { long_description?: string | null })
+                  .long_description ?? null) as string | null,
+              sizeChart:
+                ((product as { size_chart?: string | null }).size_chart ?? null) as
+                  | string
+                  | null,
               priceCents: product.price,
               salePriceCents: product.sale_price ?? null,
               stock: product.stock ?? 0,

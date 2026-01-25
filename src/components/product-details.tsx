@@ -290,6 +290,13 @@ export function ProductDetails({
         </div>
       )}
 
+      {product.sizeChart && (
+        <div className="space-y-1 pt-1 text-xs text-muted-foreground">
+          <p className="text-[11px] font-medium text-foreground">Size chart</p>
+          <p className="whitespace-pre-line">{product.sizeChart}</p>
+        </div>
+      )}
+
       <div className="space-y-2">
         <div className="flex flex-wrap items-center gap-3">
           <Button

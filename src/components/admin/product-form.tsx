@@ -23,6 +23,7 @@ type ProductFormProps = {
     sku?: string | null;
     description: string | null;
     longDescription?: string | null;
+    sizeChart?: string | null;
     priceCents: number;
     salePriceCents?: number | null;
     stock: number;
@@ -69,6 +70,7 @@ export function ProductForm({
   const [longDescription, setLongDescription] = useState(
     initialValues?.longDescription ?? "",
   );
+  const [sizeChart, setSizeChart] = useState(initialValues?.sizeChart ?? "");
   const [price, setPrice] = useState(
     initialValues ? (initialValues.priceCents / 100).toString() : "",
   );
@@ -515,6 +517,7 @@ export function ProductForm({
       sku: sku.trim() || null,
       description: description || null,
       longDescription: longDescription || null,
+      sizeChart: sizeChart || null,
       priceCents,
       salePriceCents,
       stock: stockNumber,
@@ -735,6 +738,23 @@ export function ProductForm({
         <p className="text-[11px] text-muted-foreground">
           Shown under the shipping/returns text on the product page. Line breaks
           are preserved.
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-xs font-medium text-muted-foreground">
+          Size chart (optional)
+        </label>
+        <textarea
+          value={sizeChart}
+          onChange={(event) => setSizeChart(event.target.value)}
+          rows={4}
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-xs shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          placeholder="Size chart details like measurements for S, M, L..."
+        />
+        <p className="text-[11px] text-muted-foreground">
+          Shown in a Size chart section on the product page. Line breaks are
+          preserved.
         </p>
       </div>
 

@@ -56,6 +56,7 @@ export type Product = {
   sku?: string | null;
   description: string | null;
   longDescription?: string | null;
+  sizeChart?: string | null;
   price: number;
   originalPrice?: number | null;
   salePrice?: number | null;

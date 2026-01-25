@@ -18,7 +18,7 @@ export default async function ProductPage({ params }: PageProps) {
   const { data } = await supabase
     .from("products")
     .select(
-      "id, name, slug, description, long_description, price, sale_price, images, sizes, size_stock, colors, color_stock, stock, category_id, is_featured, created_at",
+      "id, name, slug, description, long_description, size_chart, price, sale_price, images, sizes, size_stock, colors, color_stock, stock, category_id, is_featured, created_at",
     )
     .eq("slug", slug)
     .maybeSingle();
@@ -111,6 +111,10 @@ export default async function ProductPage({ params }: PageProps) {
     description: data.description ?? null,
     longDescription:
       ((data as { long_description?: string | null }).long_description ?? null) as
+        | string
+        | null,
+    sizeChart:
+      ((data as { size_chart?: string | null }).size_chart ?? null) as
         | string
         | null,
     price: effectivePrice,
