@@ -19,7 +19,7 @@ export default async function PrivacyPage() {
           Privacy policy
         </h1>
         <p className="text-sm text-muted-foreground">
-          How MARIOS collects, uses, and protects your information.
+          How AH Adele collects, uses, and protects your information.
         </p>
       </div>
 

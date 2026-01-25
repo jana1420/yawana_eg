@@ -148,7 +148,7 @@ export default async function OrderPage({ params }: PageProps) {
           Order confirmed
         </h1>
         <p className="text-sm text-muted-foreground">
-          Thank you for ordering from MARIOS. We&apos;ll send a confirmation email
+          Thank you for ordering from AH Adele. We&apos;ll send a confirmation email
           shortly.
         </p>
       </div>

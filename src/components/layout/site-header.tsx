@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Menu, ShoppingBag, User, X } from "lucide-react";
 
 import { useCart } from "@/components/cart/cart-provider";
-import MariosLogo from "../../../logo (3).png";
+import AhAdeleLogo from "../../../ah logo.png";
 
 export function SiteHeader() {
   const { cart } = useCart();
@@ -120,7 +120,7 @@ export function SiteHeader() {
   const isArabic = language === "ar";
 
   const labels = {
-    newArrivals: isArabic ? "وصل حديثاً" : "Told By MARIOS",
+    newArrivals: isArabic ? "وصل حديثاً" : "New arrivals",
     allProducts: isArabic ? "كل المنتجات" : "All products",
     bestSellers: isArabic ? "تسوق حسب الفئة" : "Shop by category",
     contact: isArabic ? "اتصل بنا" : "Contact",
@@ -153,8 +153,8 @@ export function SiteHeader() {
             className="flex items-center justify-center gap-2 md:justify-self-center"
           >
             <Image
-              src={MariosLogo}
-              alt="MARIOS"
+              src={AhAdeleLogo}
+              alt="AH Adele"
               className="h-10 w-auto sm:h-14 md:h-16"
               priority
             />

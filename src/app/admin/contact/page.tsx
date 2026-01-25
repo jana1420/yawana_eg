@@ -32,7 +32,7 @@ export default async function AdminContactPage() {
         contactInstagramUrl: data.contact_instagram_url ?? "",
         contactFacebookUrl: data.contact_facebook_url ?? "",
         contactTiktokUrl: data.contact_tiktok_url ?? "",
-        themeKey: data.theme_key ?? "marios",
+        themeKey: data.theme_key ?? "default",
 			shippingFlatFeeCents: data.shipping_flat_fee_cents ?? 0,
         shippingReturnsContent: data.shipping_returns_content ?? "",
         termsContent: data.terms_content ?? "",

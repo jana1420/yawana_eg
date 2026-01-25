@@ -142,7 +142,7 @@ export function CampaignProductsAdminPanel({
           </p>
           <p className="text-xs text-muted-foreground">
             Choose up to 5 pieces to feature in this campaign. These will show
-            with live stock bars and "Styled by MARIOS" notes.
+            with live stock bars and "Styled by AH Adele" notes.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -236,7 +236,7 @@ export function CampaignProductsAdminPanel({
                         </div>
                         <div className="space-y-1">
                           <label className="block text-[11px] font-medium text-muted-foreground">
-                            Styled by MARIOS (optional)
+                            Styled by AH Adele (optional)
                           </label>
                           <textarea
                             value={row.outfitNote}

@@ -260,7 +260,7 @@ export default async function Home({ searchParams }: HomeProps) {
               Stay in the loop
             </p>
             <h2 className="text-lg font-semibold tracking-tight sm:text-xl">
-              Join the MARIOS list
+              Join the AH Adele list
             </h2>
             <p className="text-xs text-muted-foreground">
               Be the first to discover new pieces, restocks, and limited edits.
@@ -281,7 +281,7 @@ export default async function Home({ searchParams }: HomeProps) {
               </Button>
             </div>
             <p className="text-[11px] text-muted-foreground">
-              No spam. Only thoughtful updates from MARIOS.
+              No spam. Only thoughtful updates from AH Adele.
             </p>
           </div>
         </div>

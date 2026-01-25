@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MARIOS",
-  description: "MARIOS",
+  title: "AH Adele",
+  description: "AH Adele",
 };
 
 export default async function RootLayout({
@@ -36,7 +36,7 @@ export default async function RootLayout({
     .limit(1)
     .maybeSingle();
 
-  const themeKey = (data?.theme_key as string | null) ?? "marios";
+  const themeKey = (data?.theme_key as string | null) ?? "default";
   const instagramUrl = (data?.contact_instagram_url as string | null) ?? null;
 
   return (

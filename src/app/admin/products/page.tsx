@@ -73,7 +73,7 @@ export default async function AdminProductsPage() {
           Products
         </h1>
         <p className="text-sm text-muted-foreground">
-          Manage the clothing catalog for MARIOS.
+          Manage the clothing catalog for AH Adele.
         </p>
       </div>
       <AdminQuickNav />

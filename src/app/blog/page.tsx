@@ -31,10 +31,10 @@ export default async function BlogIndexPage() {
     <div className="mx-auto max-w-5xl space-y-8 pb-12 pt-10 px-4">
       <header className="space-y-2">
         <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
-          Told By MARIOS
+          AH Adele journal
         </p>
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-          Stories from the MARIOS world
+          Stories from AH Adele
         </h1>
         <p className="text-sm text-muted-foreground">
           Styling notes, behind-the-scenes moments, and short updates from the

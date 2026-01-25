@@ -88,7 +88,7 @@ export default function RegisterPage() {
           <div className="space-y-2">
             <h1 className="text-lg font-semibold tracking-tight">Create account</h1>
             <p className="text-xs text-muted-foreground">
-              Use your phone number and a password to create a MARIOS account.
+              Use your phone number and a password to create an AH Adele account.
             </p>
           </div>
           <form className="space-y-4" onSubmit={handleSubmit}>
