@@ -289,7 +289,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
           Admin dashboard
         </h1>
         <p className="text-sm text-muted-foreground">
-          Overview of AH Adele store performance.
+          Overview of SistahModest store performance.
         </p>
       </div>
 

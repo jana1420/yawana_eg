@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Menu, ShoppingBag, User, X } from "lucide-react";
 
 import { useCart } from "@/components/cart/cart-provider";
-import AhAdeleLogo from "../../../ah logo.png";
+import SistahModestLogo from "../../../logo (500 x 250 px) (2).png";
 
 export function SiteHeader() {
   const { cart } = useCart();
@@ -135,31 +135,45 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 border-b bg-background/75 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:grid md:grid-cols-[1fr_auto_1fr] md:py-4">
-          <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex md:justify-self-start">
-            <Link href="/all-products" className="hover:text-foreground">
-              {labels.allProducts}
-            </Link>
-            <Link href="/categories" className="hover:text-foreground">
-              {labels.bestSellers}
-            </Link>
-            <Link href="/contact" className="hover:text-foreground">
-              {labels.contact}
-            </Link>
-          </nav>
+      <header className="site-header-glass sticky top-0 z-30 border-b">
+        <div className="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center px-4 py-3 md:grid-cols-[1fr_auto_1fr] md:py-4">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground md:hidden"
+              aria-label={isMobileNavOpen ? "Close menu" : "Open menu"}
+              onClick={() => setIsMobileNavOpen((open) => !open)}
+            >
+              {isMobileNavOpen ? (
+                <X className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                <Menu className="h-4 w-4" aria-hidden="true" />
+              )}
+            </button>
+            <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex">
+              <Link href="/all-products" className="hover:text-foreground">
+                {labels.allProducts}
+              </Link>
+              <Link href="/categories" className="hover:text-foreground">
+                {labels.bestSellers}
+              </Link>
+              <Link href="/contact" className="hover:text-foreground">
+                {labels.contact}
+              </Link>
+            </nav>
+          </div>
           <Link
             href="/"
-            className="flex items-center justify-center gap-2 md:justify-self-center"
+            className="flex items-center justify-center gap-2"
           >
             <Image
-              src={AhAdeleLogo}
-              alt="AH Adele"
+              src={SistahModestLogo}
+              alt="SistahModest"
               className="h-10 w-auto sm:h-14 md:h-16"
               priority
             />
           </Link>
-          <div className="flex items-center gap-3 text-sm md:justify-self-end">
+          <div className="flex items-center justify-end gap-3 text-sm">
             <button
               type="button"
               className="hidden items-center rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground md:inline-flex"
@@ -192,18 +206,6 @@ export function SiteHeader() {
                 </span>
               )}
             </Link>
-            <button
-              type="button"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground md:hidden"
-              aria-label={isMobileNavOpen ? "Close menu" : "Open menu"}
-              onClick={() => setIsMobileNavOpen((open) => !open)}
-            >
-              {isMobileNavOpen ? (
-                <X className="h-4 w-4" aria-hidden="true" />
-              ) : (
-                <Menu className="h-4 w-4" aria-hidden="true" />
-              )}
-            </button>
           </div>
         </div>
       </header>
