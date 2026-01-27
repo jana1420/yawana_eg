@@ -136,7 +136,7 @@ export function SiteHeader() {
   return (
     <>
       <header className="site-header-glass sticky top-0 z-30 border-b">
-        <div className="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center px-4 py-3 md:grid-cols-[1fr_auto_1fr] md:py-4">
+        <div className="mx-auto grid max-w-6xl grid-cols-[1fr_auto_1fr] items-center px-4 py-3 md:grid-cols-[1fr_auto_1fr] md:py-4">
           <div className="flex items-center gap-3">
             <button
               type="button"
